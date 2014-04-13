@@ -20,9 +20,14 @@ function create() {
 }
 
 function update() {
-	if( game.input.keyboard.isDown(Phaser.Keyboard.S) ){
-		player.body.y += 5;
-	}else if( game.input.keyboard.isDown(Phaser.Keyboard.W) ){
-		player.body.y -= 5;
+	
+	if( game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200 ){
+		player.body.velocity.y += 50;
+	}else if( game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200  ){
+		player.body.velocity.y -= 50;
+	}else if( player.body.velocity.y > 0 ){
+		player.body.velocity.y -= 10;
+	}else{
+		player.body.velocity.y += 10;
 	}
 }
