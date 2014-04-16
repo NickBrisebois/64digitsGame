@@ -50,6 +50,8 @@ function update() {
 	}else{
 		player.body.velocity.y += 10;
 	}
+
+	//Fancy math
 	opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
 	game.physics.arcade.collide(paddles, ball);
 
