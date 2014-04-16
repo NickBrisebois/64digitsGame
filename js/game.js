@@ -23,7 +23,8 @@ function create() {
 	player.body.collideWorldBounds = true;
 	opponent.body.collideWorldBounds = true;
 	ball.body.collideWorldBounds = true;
-
+player.body.immovable = true;
+opponent.body.immovable = true;
 	ball.body.bounce.setTo(1,1);
 	player.body.bounce.setTo(1,1);
 	opponent.body.bounce.setTo(1,1);
@@ -49,7 +50,7 @@ function update() {
 	}else{
 		player.body.velocity.y += 10;
 	}
-
+opponent.body.y = ball.body.y;
 	game.physics.arcade.collide(paddles, ball);
 
 }
