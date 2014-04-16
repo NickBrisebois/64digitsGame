@@ -30,7 +30,7 @@ opponent.body.immovable = true;
 	opponent.body.bounce.setTo(1,1);
 
 	game.input.keyboard.addKeyCapture( [ Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR ] );
-	game.input.onDown.add(launch, this);h my god I
+	game.input.onDown.add(launch, this);
 }
 
 function launch() {
