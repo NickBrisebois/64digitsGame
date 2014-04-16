@@ -29,7 +29,7 @@ function create() {
 	opponent.body.bounce.setTo(1,1);
 
 	game.input.keyboard.addKeyCapture( [ Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR ] );
-	game.input.onDown.add(launch, this);
+	game.input.onDown.add(launch, this);h my god I
 }
 
 function launch() {
