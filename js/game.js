@@ -23,8 +23,8 @@ function create() {
 	player.body.collideWorldBounds = true;
 	opponent.body.collideWorldBounds = true;
 	ball.body.collideWorldBounds = true;
-player.body.immovable = true;
-opponent.body.immovable = true;
+	player.body.immovable = true;
+	opponent.body.immovable = true;
 	ball.body.bounce.setTo(1,1);
 	player.body.bounce.setTo(1,1);
 	opponent.body.bounce.setTo(1,1);
@@ -50,7 +50,7 @@ function update() {
 	}else{
 		player.body.velocity.y += 10;
 	}
-opponent.body.y = ball.body.y;
+	opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
 	game.physics.arcade.collide(paddles, ball);
 
 }
