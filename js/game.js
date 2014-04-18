@@ -7,6 +7,8 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 var player, opponent;
 var gameStarted = false;
 var balls = new Array();
+var scoreLeft = 0;
+var scoreRight = 0;
 function preload() {
 	game.load.image('paddle', 'Images/paddle.png');
 	game.load.image('ball', 'Images/ball.png');
@@ -15,7 +17,7 @@ function preload() {
 function create() {
 
 	paddles = game.add.group();
-ballsGroup = game.add.group();
+	ballsGroup = game.add.group();
 	player = paddles.create(40, 30, 'paddle');
 	opponent = paddles.create(750, 30, 'paddle');
 	balls.push(new ball(400, 300));
@@ -45,12 +47,24 @@ function ball(x, y) {
 		YVector =  - (game.input.y - ball.y);
 		ball.body.velocity.setTo(XVector, YVector);
 	}
+	this.update = function () {
+		if(ball.x>=790){
+		
+		scoreRight++;
+		console.log("score: "+scoreLeft+" : "+scoreRight);
+	}
+			if(ball.x<=0){
+		
+		scoreLeft++;
+		console.log("score: "+scoreLeft+" : "+scoreRight);
+	}
+	}
 }
 function launch() {
 	if (!gameStarted) {
-for(var i = 0; i<balls.length; i++){
-balls[i].launch();
-}
+		for (var i = 0; i < balls.length; i++) {
+			balls[i].launch();
+		}
 		gameStarted = true;
 	}
 }
@@ -69,8 +83,10 @@ function update() {
 
 	//Fancy math
 	//opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
-	
 
+for (var i = 0; i < balls.length; i++) {
+balls[i].update();
+}
 	game.physics.arcade.collide(paddles, ballsGroup);
 
 }
