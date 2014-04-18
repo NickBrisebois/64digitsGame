@@ -75,12 +75,13 @@ function update() {
 		player.body.velocity.y += 50;
 	} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
 		player.body.velocity.y -= 50;
-	} else if (player.body.velocity.y > 0) {
+	} else if (player.body.velocity.y >= 10) {
 		player.body.velocity.y -= 10;
-	} else {
+	} else if (player.body.velocity.y <= -10) {
 		player.body.velocity.y += 10;
+	}else{
+	player.body.velocity.y = 0;
 	}
-
 	//Fancy math
 	//opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
 
