@@ -24,6 +24,7 @@ function create() {
 	line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
 	paddles = game.add.group();
 	ballsGroup = game.add.group();
+	blocks = game.add.group();
 	player = paddles.create(40, 30, 'paddle');
 	opponent = paddles.create(750, 30, 'paddle');
 	balls.push(new ball(game.world.centerX, 300));
@@ -100,6 +101,8 @@ function ball(x, y) {
 
 function createBlock(x, y){
 	this.block = blocks.create(x, y, 'block');
+	game.physics.enable(this.block, Phaser.Physics.ARCADE);
+	this.block.immovable= true;
 }
 
 function score(side, ballObj) {
