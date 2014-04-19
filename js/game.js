@@ -6,7 +6,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 	});
 
 
-var player, opponent, blocks, block;
+var player, opponent, blocks;
 
 var gameStarted = false;
 var balls = new Array();
@@ -18,6 +18,7 @@ var scoreRight = 0;
 function preload() {
 	game.load.image('paddle', 'Images/paddle.png');
 	game.load.image('ball', 'Images/ball.png');
+	game.load.image('block', 'Images/block.png');
 }
 
 function create() {
@@ -25,8 +26,8 @@ function create() {
 	paddles = game.add.group();
 	ballsGroup = game.add.group();
 	blocks = game.add.group();
-	player = paddles.create(40, 30, 'paddle');
-	opponent = paddles.create(750, 30, 'paddle');
+	player = paddles.create(90, 30, 'paddle');
+	opponent = paddles.create(700, 30, 'paddle');
 	balls.push(new ball(game.world.centerX, 300));
 	balls.push(new ball(game.world.centerX, 330));
 	game.physics.enable(player, Phaser.Physics.ARCADE);
@@ -53,7 +54,6 @@ function create() {
 	}
 
 	game.physics.enable(blocks, Phaser.Physics.ARCADE);
-	blocks.body.immovable = true;
 
 	scoreLeft = game.add.text(game.world.centerX - 300, 0, "0", {
 			font : "65px Arial",
@@ -102,7 +102,7 @@ function ball(x, y) {
 function createBlock(x, y){
 	this.block = blocks.create(x, y, 'block');
 	game.physics.enable(this.block, Phaser.Physics.ARCADE);
-	this.block.immovable= true;
+	this.block.body.immovable = true;
 }
 
 function score(side, ballObj) {
