@@ -52,38 +52,56 @@ function create() {
 		});
 }
 function ball(x, y) {
-	var ball = ballsGroup.create(x, y, 'ball');
-	ball.anchor.set(0.5);
-	game.physics.enable(ball, Phaser.Physics.ARCADE);
-	ball.body.collideWorldBounds = true;
-	ball.body.bounce.setTo(1.1, 1.1);
+	this.ball = ballsGroup.create(x, y, 'ball');
+	this.ball.anchor.set(0.5);
+	game.physics.enable(this.ball, Phaser.Physics.ARCADE);
+	this.ball.body.collideWorldBounds = true;
+	this.ball.body.bounce.setTo(1.1, 1.1);
 	this.launch = function () {
-		XVector =  - (game.input.x - ball.x);
-		YVector =  - (game.input.y - ball.y);
-		ball.body.velocity.setTo(XVector, YVector);
+		XVector =  - (game.input.x - this.ball.x);
+		YVector =  - (game.input.y - this.ball.y);
+		this.ball.body.velocity.setTo(XVector, YVector);
+	}
+	this.autoLaunch = function(side){
+	if(side){
+	this.ball.body.velocity.setTo(-100, 0);
+	}else{
+	this.ball.body.velocity.setTo(100, 0);
+	}
+	return this;
 	}
 	this.update = function () {
-		if (ball.x >= 790) {
-
-			scoreLeft.text++;
-			ball.kill();
-			var index = balls.indexOf(this);
-			if (index > -1) {
-				balls.splice(index, 1);
-			}
+		if (this.ball.x >= 790) {
+			score(false, this);
 			//console.log("score: "+scoreLeft+" : "+scoreRight);
 		}
-		if (ball.x <= 10) {
+		if (this.ball.x <= 10) {
+			score(true, this);
 
-			scoreRight.text++;
-			ball.kill();
-			var index = balls.indexOf(this);
-			if (index > -1) {
-				balls.splice(index, 1);
-			}
 			//console.log("score: "+scoreLeft+" : "+scoreRight);
 		}
 	}
+}
+function score(side, ballObj) {
+
+	ballObj.ball.kill();
+	var index = balls.indexOf(ballObj);
+	if (index > -1) {
+		balls.splice(index, 1);
+	}
+	if (side) {
+		scoreRight.text++;
+
+	} else {
+		scoreLeft.text++;
+
+	}
+		if(balls.length ==0){
+		
+	balls.push(new ball(game.world.centerX, 300).autoLaunch(side));
+	
+	}
+	
 }
 function launch() {
 	if (!gameStarted) {
