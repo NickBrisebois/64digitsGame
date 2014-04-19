@@ -90,12 +90,16 @@ function ball(x, y) {
 	this.update = function () {
 		if (this.ball.x >= 785) {
 			score(false, this);
-			//console.log("score: "+scoreLeft+" : "+scoreRight);
-		}
-		if (this.ball.x <= 10) {
+		}else if (this.ball.x <= 10) {
 			score(true, this);
-			//console.log("score: "+scoreLeft+" : "+scoreRight);
 		}
+
+		if(500 > this.ball.body.velocity.x < -500) {
+			if(500 > this.ball.body.velocity.y < -500){
+				this.ball.body.bounce.setTo(0.3, 0.3);
+			}
+		}
+
 	}
 }
 
@@ -146,7 +150,9 @@ function update() {
 
 	game.physics.arcade.collide(paddles, ballsGroup);
 	game.physics.arcade.collide(ballsGroup, ballsGroup);
-	game.physics.arcade.collide(ballsGroup, blocks);
+	if(game.physics.arcade.collide(ballsGroup, blocks)){
+		console.log("Test");
+	}
 
 
 	if( game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200 ){
@@ -162,7 +168,5 @@ function update() {
 	for (var i = 0; i < balls.length; i++) {
 		balls[i].update();
 	}
-	game.physics.arcade.collide(paddles, ballsGroup);
-	game.physics.arcade.collide(ballsGroup, ballsGroup);
 
 }
