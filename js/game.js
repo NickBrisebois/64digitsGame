@@ -5,7 +5,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 		render : render
 	});
 
-var player, opponent, blocks;
+var player, opponent, blocks, block;
 var gameStarted = false;
 var balls = new Array();
 var scoreLeft = 0;
@@ -42,11 +42,13 @@ function create() {
 
 	for(var i=0; i<60; i++) {
 		for(var ii=0; ii<8; ii++) {
-			blocks.create(ii*10, i*10, 'block');
-			blocks.create((ii*10)+720, i*10, 'block');
+			createBlock(ii*10, i*10);
+			createBlock((ii*10)+720, i*10);
 		}
 	}
 
+	game.physics.enable(blocks, Phaser.Physics.ARCADE);
+	blocks.body.immovable = true;
 
 	scoreLeft = game.add.text(game.world.centerX - 300, 0, "0", {
 			font : "65px Arial",
@@ -90,6 +92,11 @@ function ball(x, y) {
 		}
 	}
 }
+
+function createBlock(x, y){
+	this.block = blocks.create(x, y, 'block');
+}
+
 function score(side, ballObj) {
 
 	ballObj.ball.kill();
@@ -128,6 +135,7 @@ function update() {
 
 	game.physics.arcade.collide(paddles, ballsGroup);
 	game.physics.arcade.collide(ballsGroup, ballsGroup);
+	game.physics.arcade.collide(ballsGroup, blocks);
 
 
 	if( game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200 ){
