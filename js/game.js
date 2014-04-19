@@ -36,6 +36,7 @@ function create() {
 
 	game.input.keyboard.addKeyCapture([Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR]);
 	game.input.onDown.add(launch, this);
+	new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
 }
 function ball(x, y) {
 	var ball = ballsGroup.create(x, y, 'ball');
