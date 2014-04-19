@@ -18,7 +18,7 @@ function preload() {
 }
 
 function create() {
-line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
+	line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
 	paddles = game.add.group();
 	ballsGroup = game.add.group();
 	player = paddles.create(40, 30, 'paddle');
@@ -39,9 +39,17 @@ line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
 
 	game.input.keyboard.addKeyCapture([Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR]);
 	game.input.onDown.add(launch, this);
-	
-    scoreLeft = game.add.text(game.world.centerX-300, 0, "0", { font: "65px Arial", fill: "#ff0044", align: "left" });
- scoreRight = game.add.text(game.world.centerX+300, 0, "0", { font: "65px Arial", fill: "#ff0044", align: "right" });
+
+	scoreLeft = game.add.text(game.world.centerX - 300, 0, "0", {
+			font : "65px Arial",
+			fill : "#ff0044",
+			align : "left"
+		});
+	scoreRight = game.add.text(game.world.centerX + 300, 0, "0", {
+			font : "65px Arial",
+			fill : "#ff0044",
+			align : "right"
+		});
 }
 function ball(x, y) {
 	var ball = ballsGroup.create(x, y, 'ball');
@@ -55,18 +63,26 @@ function ball(x, y) {
 		ball.body.velocity.setTo(XVector, YVector);
 	}
 	this.update = function () {
-		if(ball.x>=790){
-		
-		scoreLeft.text++;
-		ball.kill();
-		//console.log("score: "+scoreLeft+" : "+scoreRight);
-	}
-			if(ball.x<=0){
-		
-		scoreRight.text++;
-		ball.kill();
-		//console.log("score: "+scoreLeft+" : "+scoreRight);
-	}
+		if (ball.x >= 790) {
+
+			scoreLeft.text++;
+			ball.kill();
+			var index = balls.indexOf(this);
+			if (index > -1) {
+				balls.splice(index, 1);
+			}
+			//console.log("score: "+scoreLeft+" : "+scoreRight);
+		}
+		if (ball.x <= 10) {
+
+			scoreRight.text++;
+			ball.kill();
+			var index = balls.indexOf(this);
+			if (index > -1) {
+				balls.splice(index, 1);
+			}
+			//console.log("score: "+scoreLeft+" : "+scoreRight);
+		}
 	}
 }
 function launch() {
@@ -80,19 +96,18 @@ function launch() {
 
 function render() {
 
-    game.debug.geom(line);
-   
+	game.debug.geom(line);
 
 }
 function update() {
-player.body.y = game.input.y-30;
-	
+	player.body.y = game.input.y - player.height / 2;
+
 	//Fancy math
 	//opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
 
-for (var i = 0; i < balls.length; i++) {
-balls[i].update();
-}
+	for (var i = 0; i < balls.length; i++) {
+		balls[i].update();
+	}
 	game.physics.arcade.collide(paddles, ballsGroup);
 	game.physics.arcade.collide(ballsGroup, ballsGroup);
 
