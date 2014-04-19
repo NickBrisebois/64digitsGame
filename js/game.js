@@ -1,13 +1,16 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 		preload : preload,
 		create : create,
-		update : update
+		update : update,
+		render : render
 	});
 
 var player, opponent;
 var gameStarted = false;
 var balls = new Array();
 var scoreLeft = 0;
+var line;
+var score;
 var scoreRight = 0;
 function preload() {
 	game.load.image('paddle', 'Images/paddle.png');
@@ -36,7 +39,9 @@ function create() {
 
 	game.input.keyboard.addKeyCapture([Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR]);
 	game.input.onDown.add(launch, this);
-	new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
+	line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
+    scoreLeft = game.add.text(game.world.centerX-300, 0, "0", { font: "65px Arial", fill: "#ff0044", align: "left" });
+ scoreRight = game.add.text(game.world.centerX+300, 0, "0", { font: "65px Arial", fill: "#ff0044", align: "right" });
 }
 function ball(x, y) {
 	var ball = ballsGroup.create(x, y, 'ball');
@@ -51,13 +56,13 @@ function ball(x, y) {
 	this.update = function () {
 		if(ball.x>=790){
 		
-		scoreRight++;
-		console.log("score: "+scoreLeft+" : "+scoreRight);
+		scoreRight.text++;
+		//console.log("score: "+scoreLeft+" : "+scoreRight);
 	}
 			if(ball.x<=0){
 		
-		scoreLeft++;
-		console.log("score: "+scoreLeft+" : "+scoreRight);
+		scoreLeft.text++;
+		//console.log("score: "+scoreLeft+" : "+scoreRight);
 	}
 	}
 }
@@ -70,6 +75,12 @@ function launch() {
 	}
 }
 
+function render() {
+
+    game.debug.geom(line);
+   
+
+}
 function update() {
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
@@ -90,5 +101,6 @@ for (var i = 0; i < balls.length; i++) {
 balls[i].update();
 }
 	game.physics.arcade.collide(paddles, ballsGroup);
+	game.physics.arcade.collide(ballsGroup, ballsGroup);
 
 }
