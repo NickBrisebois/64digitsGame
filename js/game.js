@@ -56,12 +56,14 @@ function ball(x, y) {
 	this.update = function () {
 		if(ball.x>=790){
 		
-		scoreRight.text++;
+		scoreLeft.text++;
+		ball.kill();
 		//console.log("score: "+scoreLeft+" : "+scoreRight);
 	}
 			if(ball.x<=0){
 		
-		scoreLeft.text++;
+		scoreRight.text++;
+		ball.kill();
 		//console.log("score: "+scoreLeft+" : "+scoreRight);
 	}
 	}
@@ -82,18 +84,8 @@ function render() {
 
 }
 function update() {
-
-	if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
-		player.body.velocity.y += 50;
-	} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
-		player.body.velocity.y -= 50;
-	} else if (player.body.velocity.y >= 10) {
-		player.body.velocity.y -= 10;
-	} else if (player.body.velocity.y <= -10) {
-		player.body.velocity.y += 10;
-	}else{
-	player.body.velocity.y = 0;
-	}
+player.body.y = game.input.y-30;
+	
 	//Fancy math
 	//opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
 
