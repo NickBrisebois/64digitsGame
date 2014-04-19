@@ -55,6 +55,8 @@ function create() {
 
 function ball(x, y) {
 	this.ball = ballsGroup.create(x, y, 'ball');
+	
+
 	this.ball.anchor.set(0.5);
 	game.physics.enable(this.ball, Phaser.Physics.ARCADE);
 	this.ball.body.collideWorldBounds = true;
@@ -66,14 +68,14 @@ function ball(x, y) {
 	}
 	this.autoLaunch = function(side){
 		if(side){
-			this.ball.body.velocity.setTo(-100, 0);
+			this.ball.body.velocity.setTo(-200, -100);
 		}else{
-			this.ball.body.velocity.setTo(100, 0);
+			this.ball.body.velocity.setTo(200, 100);
 		}
 		return this;
 	}
 	this.update = function () {
-		if (this.ball.x >= 790) {
+		if (this.ball.x >= 789) {
 			score(false, this);
 			//console.log("score: "+scoreLeft+" : "+scoreRight);
 		}
