@@ -5,7 +5,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 		render : render
 	});
 
-var player, opponent, blocks;
+var player, opponent;
 var gameStarted = false;
 var balls = new Array();
 var scoreLeft = 0;
@@ -16,16 +16,14 @@ var scoreRight = 0;
 function preload() {
 	game.load.image('paddle', 'Images/paddle.png');
 	game.load.image('ball', 'Images/ball.png');
-	game.load.image('block', 'Images/block.png');
 }
 
 function create() {
 	line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
 	paddles = game.add.group();
 	ballsGroup = game.add.group();
-	blocks = game.add.group();
-	player = paddles.create(90, 30, 'paddle');
-	opponent = paddles.create(700, 30, 'paddle');
+	player = paddles.create(40, 30, 'paddle');
+	opponent = paddles.create(750, 30, 'paddle');
 	balls.push(new ball(game.world.centerX, 300));
 	balls.push(new ball(game.world.centerX, 330));
 	game.physics.enable(player, Phaser.Physics.ARCADE);
@@ -37,16 +35,11 @@ function create() {
 	player.body.immovable = true;
 	opponent.body.immovable = true;
 
+	player.body.bounce.setTo(1, 1);
+	opponent.body.bounce.setTo(1, 1);
+
 	game.input.keyboard.addKeyCapture([Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR]);
 	game.input.onDown.add(launch, this);
-
-	for(var i=0; i<60; i++) {
-		for(var ii=0; ii<8; ii++) {
-			blocks.create(ii*10, i*10, 'block');
-			blocks.create((ii*10)+720, i*10, 'block');
-		}
-	}
-
 
 	scoreLeft = game.add.text(game.world.centerX - 300, 0, "0", {
 			font : "65px Arial",
@@ -62,7 +55,6 @@ function create() {
 
 function ball(x, y) {
 	this.ball = ballsGroup.create(x, y, 'ball');
-	
 
 	this.ball.anchor.set(0.5);
 	game.physics.enable(this.ball, Phaser.Physics.ARCADE);
@@ -73,16 +65,16 @@ function ball(x, y) {
 		YVector =  - (game.input.y - this.ball.y);
 		this.ball.body.velocity.setTo(XVector, YVector);
 	}
-	this.autoLaunch = function(side){
-		if(side){
-			this.ball.body.velocity.setTo(-200, -100);
-		}else{
-			this.ball.body.velocity.setTo(200, 100);
+	this.autoLaunch = function (side) {
+		if (side) {
+			this.ball.body.velocity.setTo(-400, game.rnd.integerInRange(-200, 200));
+		} else {
+			this.ball.body.velocity.setTo(400, game.rnd.integerInRange(-200, 200));
 		}
 		return this;
 	}
 	this.update = function () {
-		if (this.ball.x >= 789) {
+		if (this.ball.x >= 785) {
 			score(false, this);
 			//console.log("score: "+scoreLeft+" : "+scoreRight);
 		}
@@ -107,11 +99,12 @@ function score(side, ballObj) {
 		scoreLeft.text++;
 
 	}
+	if (balls.length == 0) {
 
-	if(balls.length ==0){		
-		balls.push(new ball(game.world.centerX, 300).autoLaunch(side));
+		balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 200)).autoLaunch(side));
+
 	}
-	
+
 }
 function launch() {
 	if (!gameStarted) {
@@ -123,18 +116,15 @@ function launch() {
 }
 
 function render() {
-	game.debug.geom(line);
-}
 
+	game.debug.geom(line);
+
+}
 function update() {
 
-	game.physics.arcade.collide(paddles, ballsGroup);
-	game.physics.arcade.collide(ballsGroup, ballsGroup);
-
-
-	if( game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200 ){
+	if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
 		player.body.y += 5;
-	}else if( game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200  ){
+	} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
 		player.body.y -= 5;
 	}
 
@@ -144,4 +134,7 @@ function update() {
 	for (var i = 0; i < balls.length; i++) {
 		balls[i].update();
 	}
+	game.physics.arcade.collide(paddles, ballsGroup);
+	game.physics.arcade.collide(ballsGroup, ballsGroup);
+
 }
