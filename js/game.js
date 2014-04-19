@@ -18,13 +18,13 @@ function preload() {
 }
 
 function create() {
-
+line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
 	paddles = game.add.group();
 	ballsGroup = game.add.group();
 	player = paddles.create(40, 30, 'paddle');
 	opponent = paddles.create(750, 30, 'paddle');
-	balls.push(new ball(400, 300));
-	balls.push(new ball(400, 330));
+	balls.push(new ball(game.world.centerX, 300));
+	balls.push(new ball(game.world.centerX, 330));
 	game.physics.enable(player, Phaser.Physics.ARCADE);
 	game.physics.enable(opponent, Phaser.Physics.ARCADE);
 
@@ -39,12 +39,13 @@ function create() {
 
 	game.input.keyboard.addKeyCapture([Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR]);
 	game.input.onDown.add(launch, this);
-	line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
+	
     scoreLeft = game.add.text(game.world.centerX-300, 0, "0", { font: "65px Arial", fill: "#ff0044", align: "left" });
  scoreRight = game.add.text(game.world.centerX+300, 0, "0", { font: "65px Arial", fill: "#ff0044", align: "right" });
 }
 function ball(x, y) {
 	var ball = ballsGroup.create(x, y, 'ball');
+	ball.anchor.set(0.5);
 	game.physics.enable(ball, Phaser.Physics.ARCADE);
 	ball.body.collideWorldBounds = true;
 	ball.body.bounce.setTo(1.1, 1.1);
