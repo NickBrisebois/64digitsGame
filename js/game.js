@@ -12,6 +12,7 @@ var scoreLeft = 0;
 var line;
 var score;
 var scoreRight = 0;
+
 function preload() {
 	game.load.image('paddle', 'Images/paddle.png');
 	game.load.image('ball', 'Images/ball.png');
@@ -51,6 +52,7 @@ function create() {
 			align : "right"
 		});
 }
+
 function ball(x, y) {
 	this.ball = ballsGroup.create(x, y, 'ball');
 	this.ball.anchor.set(0.5);
@@ -63,12 +65,12 @@ function ball(x, y) {
 		this.ball.body.velocity.setTo(XVector, YVector);
 	}
 	this.autoLaunch = function(side){
-	if(side){
-	this.ball.body.velocity.setTo(-100, 0);
-	}else{
-	this.ball.body.velocity.setTo(100, 0);
-	}
-	return this;
+		if(side){
+			this.ball.body.velocity.setTo(-100, 0);
+		}else{
+			this.ball.body.velocity.setTo(100, 0);
+		}
+		return this;
 	}
 	this.update = function () {
 		if (this.ball.x >= 790) {
@@ -77,7 +79,6 @@ function ball(x, y) {
 		}
 		if (this.ball.x <= 10) {
 			score(true, this);
-
 			//console.log("score: "+scoreLeft+" : "+scoreRight);
 		}
 	}
@@ -85,6 +86,7 @@ function ball(x, y) {
 function score(side, ballObj) {
 
 	ballObj.ball.kill();
+
 	var index = balls.indexOf(ballObj);
 	if (index > -1) {
 		balls.splice(index, 1);
@@ -118,7 +120,13 @@ function render() {
 
 }
 function update() {
-	player.body.y = game.input.y - player.height / 2;
+
+
+	if( game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200 ){
+		player.body.y += 5;
+	}else if( game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200  ){
+		player.body.y -= 5;
+	}
 
 	//Fancy math
 	//opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
