@@ -161,6 +161,7 @@ function update() {
 
 if( game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)&& !gameStarted){
 launch();
+begin.destroy(true);
 }
 	if( game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200 ){
 
