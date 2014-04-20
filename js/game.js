@@ -14,6 +14,7 @@ var scoreLeft = 0;
 var line;
 var score;
 var scoreRight = 0;
+var begin;
 
 function preload() {
 	game.load.image('paddle', 'Images/paddle.png');
@@ -43,7 +44,7 @@ function create() {
 	opponent.body.bounce.setTo(1, 1);
 
 	game.input.keyboard.addKeyCapture([Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR]);
-	game.input.onDown.add(launch, this);
+	
 
 
 	for(var i=0; i<60; i++) {
@@ -62,6 +63,11 @@ function create() {
 	scoreRight = game.add.text(game.world.centerX + 30, 0, "0", {
 			font : "65px Arial",
 			fill : "#4E4E4E"
+		});
+			begin = game.add.text(game.world.centerX/2.5, game.world.centerY , "Spacebar To Start", {
+			font : "65px Arial",
+			fill : "#4E4E4E",
+			align : "center"
 		});
 }
 
@@ -135,7 +141,7 @@ function score(side, ballObj) {
 function launch() {
 	if (!gameStarted) {
 		for (var i = 0; i < balls.length; i++) {
-			balls[i].launch();
+			balls[i].autoLaunch(true);
 		}
 		gameStarted = true;
 	}
@@ -153,12 +159,14 @@ function update() {
 	game.physics.arcade.collide(ballsGroup, ballsGroup);
 	game.physics.arcade.collide(ballsGroup, blocks, wallCollision, null, this);
 
-
+if( game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)&& !gameStarted){
+launch();
+}
 	if( game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200 ){
 
-		player.body.y += 5;
+		player.body.y += 10;
 	} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
-		player.body.y -= 5;
+		player.body.y -= 10;
 	}
 
 	/*
