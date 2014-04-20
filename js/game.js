@@ -71,7 +71,7 @@ function ball(x, y) {
 	this.ball.anchor.set(0.5);
 	game.physics.enable(this.ball, Phaser.Physics.ARCADE);
 	this.ball.body.collideWorldBounds = true;
-	this.ball.body.bounce.setTo(1.1, 1.1);
+	this.ball.body.bounce.setTo(1.01, 1.01);
 	this.launch = function () {
 		XVector =  - (game.input.x - this.ball.x);
 		YVector =  - (game.input.y - this.ball.y);
