@@ -47,9 +47,9 @@ function create() {
 
 
 	for(var i=0; i<60; i++) {
-		for(var ii=0; ii<8; ii++) {
+		for(var ii=0; ii<4; ii++) {
 			createBlock(ii*10, i*10);
-			createBlock((ii*10)+720, i*10);
+			createBlock((ii*10)+760, i*10);
 		}
 	}
 
@@ -79,9 +79,11 @@ function ball(x, y) {
 	}
 	this.autoLaunch = function (side) {
 		if (side) {
-			this.ball.body.velocity.setTo(-400, game.rnd.integerInRange(-200, 200));
+		game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.ball.body.velocity.setTo(-400, game.rnd.integerInRange(-200, 200))}, this);
+			
 		} else {
-			this.ball.body.velocity.setTo(400, game.rnd.integerInRange(-200, 200));
+		game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.ball.body.velocity.setTo(400, game.rnd.integerInRange(-200, 200))}, this);
+			;
 		}
 		return this;
 	}
