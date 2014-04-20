@@ -1,3 +1,4 @@
 Rule change system
-Score
 More relative positions of objects.
+* Create better opponent AI
+Breakable Blocks

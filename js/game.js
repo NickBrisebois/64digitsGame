@@ -55,15 +55,13 @@ function create() {
 
 	game.physics.enable(blocks, Phaser.Physics.ARCADE);
 
-	scoreLeft = game.add.text(game.world.centerX - 300, 0, "0", {
+	scoreLeft = game.add.text(game.world.centerX - 65, 0, "0", {
 			font : "65px Arial",
-			fill : "#ff0044",
-			align : "left"
+			fill : "#4E4E4E"
 		});
-	scoreRight = game.add.text(game.world.centerX + 300, 0, "0", {
+	scoreRight = game.add.text(game.world.centerX + 30, 0, "0", {
 			font : "65px Arial",
-			fill : "#ff0044",
-			align : "right"
+			fill : "#4E4E4E"
 		});
 }
 
@@ -96,7 +94,11 @@ function ball(x, y) {
 
 		if(500 > this.ball.body.velocity.x < -500) {
 			if(500 > this.ball.body.velocity.y < -500){
-				this.ball.body.bounce.setTo(0.3, 0.3);
+				/*
+				===================
+				SLOW DOWN THE BALLS HERE
+				===================
+				*/
 			}
 		}
 
@@ -105,6 +107,7 @@ function ball(x, y) {
 
 function createBlock(x, y){
 	this.block = blocks.create(x, y, 'block');
+	this.block.name = "block";
 	game.physics.enable(this.block, Phaser.Physics.ARCADE);
 	this.block.body.immovable = true;
 }
@@ -119,15 +122,11 @@ function score(side, ballObj) {
 	}
 	if (side) {
 		scoreRight.text++;
-
 	} else {
 		scoreLeft.text++;
-
 	}
 	if (balls.length == 0) {
-
 		balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 200)).autoLaunch(side));
-
 	}
 
 }
@@ -150,9 +149,7 @@ function update() {
 
 	game.physics.arcade.collide(paddles, ballsGroup);
 	game.physics.arcade.collide(ballsGroup, ballsGroup);
-	if(game.physics.arcade.collide(ballsGroup, blocks)){
-		console.log("Test");
-	}
+	game.physics.arcade.collide(ballsGroup, blocks, wallCollision, null, this);
 
 
 	if( game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200 ){
@@ -162,11 +159,20 @@ function update() {
 		player.body.y -= 5;
 	}
 
-	//Fancy math
-	//opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
+	/*
+		REPLACE FANCY MATH WITH BETTER ENEMY AI
+		opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
+	*/
+
 
 	for (var i = 0; i < balls.length; i++) {
 		balls[i].update();
 	}
 
+}
+
+function wallCollision(obj1, obj2) {
+	if(obj2.name == "block"){
+		obj2.kill();
+	}
 }
