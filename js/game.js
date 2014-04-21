@@ -83,12 +83,12 @@ function ball(x, y) {
 	this.autoLaunch = function (side) {
 		if (side) {
 			game.time.events.add(Phaser.Timer.SECOND * 2, function () {
-				this.ball.body.velocity.setTo(-400, game.rnd.integerInRange(-200, 200))
+				this.ball.body.velocity.setTo(-400, game.rnd.integerInRange(-150, 150))
 			}, this);
 
 		} else {
 			game.time.events.add(Phaser.Timer.SECOND * 2, function () {
-				this.ball.body.velocity.setTo(400, game.rnd.integerInRange(-200, 200))
+				this.ball.body.velocity.setTo(400, game.rnd.integerInRange(-150, 150))
 			}, this); ;
 		}
 		return this;
@@ -119,15 +119,23 @@ function createBlock(x, y) {
 	game.physics.enable(this.block, Phaser.Physics.ARCADE);
 	this.block.body.immovable = true;
 }
-function gameStart(){
+function gameStart() {
 	launch();
-		begin.destroy(true);
-game.time.events.loop(Phaser.Timer.SECOND*5, ruleLoop, this);
+	begin.destroy(true);
+	game.time.events.loop(Phaser.Timer.SECOND * 5, ruleLoop, this);
 }
 var turn = true;
-function ruleLoop(){
-spawnBall(turn);
-turn = !turn;
+function ruleLoop() {
+	spawnBall(turn);
+	var ruleChangeAlert = game.add.text(game.world.centerX -120, game.world.centerY-200, "Multiball!", {
+			font : "65px Arial",
+			fill : "#ffffff",
+			align : "center"
+		});
+		   game.time.events.add(Phaser.Timer.SECOND * 3, function(){ruleChangeAlert.destroy(true)}, this);
+
+
+	turn = !turn;
 }
 function score(side, ballObj) {
 
@@ -143,11 +151,11 @@ function score(side, ballObj) {
 		scoreLeft.text++;
 	}
 	if (balls.length == 0) {
-	spawnBall(side);
+		spawnBall(side);
 	}
 
 }
-function spawnBall(side){
+function spawnBall(side) {
 	balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 400)).autoLaunch(side));
 }
 function launch() {
@@ -171,7 +179,7 @@ function update() {
 	game.physics.arcade.collide(ballsGroup, blocks, wallCollision, null, this);
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && !gameStarted) {
-	gameStart();
+		gameStart();
 	}
 	if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
 
