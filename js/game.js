@@ -119,7 +119,16 @@ function createBlock(x, y) {
 	game.physics.enable(this.block, Phaser.Physics.ARCADE);
 	this.block.body.immovable = true;
 }
-
+function gameStart(){
+	launch();
+		begin.destroy(true);
+game.time.events.loop(Phaser.Timer.SECOND*5, ruleLoop, this);
+}
+var turn = true;
+function ruleLoop(){
+spawnBall(turn);
+turn = !turn;
+}
 function score(side, ballObj) {
 
 	ballObj.ball.kill();
@@ -134,9 +143,12 @@ function score(side, ballObj) {
 		scoreLeft.text++;
 	}
 	if (balls.length == 0) {
-		balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 200)).autoLaunch(side));
+	spawnBall(side);
 	}
 
+}
+function spawnBall(side){
+	balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 400)).autoLaunch(side));
 }
 function launch() {
 	if (!gameStarted) {
@@ -159,8 +171,7 @@ function update() {
 	game.physics.arcade.collide(ballsGroup, blocks, wallCollision, null, this);
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && !gameStarted) {
-		launch();
-		begin.destroy(true);
+	gameStart();
 	}
 	if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
 
