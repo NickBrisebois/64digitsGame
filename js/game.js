@@ -5,7 +5,6 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 		render : render
 	});
 
-
 var player, opponent, blocks;
 
 var gameStarted = false;
@@ -44,13 +43,11 @@ function create() {
 	opponent.body.bounce.setTo(1, 1);
 
 	game.input.keyboard.addKeyCapture([Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR]);
-	
 
-
-	for(var i=0; i<60; i++) {
-		for(var ii=0; ii<4; ii++) {
-			createBlock(ii*10, i*10);
-			createBlock((ii*10)+760, i*10);
+	for (var i = 0; i < 60; i++) {
+		for (var ii = 0; ii < 4; ii++) {
+			createBlock(ii * 10, i * 10);
+			createBlock((ii * 10) + 760, i * 10);
 		}
 	}
 
@@ -58,15 +55,15 @@ function create() {
 
 	scoreLeft = game.add.text(game.world.centerX - 65, 0, "0", {
 			font : "65px Arial",
-			fill : "#4E4E4E"
+			fill : "#ffffff"
 		});
 	scoreRight = game.add.text(game.world.centerX + 30, 0, "0", {
 			font : "65px Arial",
-			fill : "#4E4E4E"
+			fill : "#ffffff"
 		});
-			begin = game.add.text(game.world.centerX/2.5, game.world.centerY , "Spacebar To Start", {
+	begin = game.add.text(game.world.centerX / 2.5, game.world.centerY, "Spacebar To Start", {
 			font : "65px Arial",
-			fill : "#4E4E4E",
+			fill : "#ffffff",
 			align : "center"
 		});
 }
@@ -85,35 +82,38 @@ function ball(x, y) {
 	}
 	this.autoLaunch = function (side) {
 		if (side) {
-		game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.ball.body.velocity.setTo(-400, game.rnd.integerInRange(-200, 200))}, this);
-			
+			game.time.events.add(Phaser.Timer.SECOND * 2, function () {
+				this.ball.body.velocity.setTo(-400, game.rnd.integerInRange(-200, 200))
+			}, this);
+
 		} else {
-		game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.ball.body.velocity.setTo(400, game.rnd.integerInRange(-200, 200))}, this);
-			;
+			game.time.events.add(Phaser.Timer.SECOND * 2, function () {
+				this.ball.body.velocity.setTo(400, game.rnd.integerInRange(-200, 200))
+			}, this); ;
 		}
 		return this;
 	}
 	this.update = function () {
 		if (this.ball.x >= 785) {
 			score(false, this);
-		}else if (this.ball.x <= 10) {
+		} else if (this.ball.x <= 10) {
 			score(true, this);
 		}
 
-		if(500 > this.ball.body.velocity.x < -500) {
-			if(500 > this.ball.body.velocity.y < -500){
+		if (500 > this.ball.body.velocity.x < -500) {
+			if (500 > this.ball.body.velocity.y < -500) {
 				/*
 				===================
 				SLOW DOWN THE BALLS HERE
 				===================
-				*/
+				 */
 			}
 		}
 
 	}
 }
 
-function createBlock(x, y){
+function createBlock(x, y) {
 	this.block = blocks.create(x, y, 'block');
 	this.block.name = "block";
 	game.physics.enable(this.block, Phaser.Physics.ARCADE);
@@ -154,16 +154,15 @@ function render() {
 }
 function update() {
 
-
 	game.physics.arcade.collide(paddles, ballsGroup);
 	game.physics.arcade.collide(ballsGroup, ballsGroup);
 	game.physics.arcade.collide(ballsGroup, blocks, wallCollision, null, this);
 
-if( game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)&& !gameStarted){
-launch();
-begin.destroy(true);
-}
-	if( game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200 ){
+	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && !gameStarted) {
+		launch();
+		begin.destroy(true);
+	}
+	if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
 
 		player.body.y += 10;
 	} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
@@ -171,10 +170,9 @@ begin.destroy(true);
 	}
 
 	/*
-		REPLACE FANCY MATH WITH BETTER ENEMY AI
-		opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
-	*/
-
+	REPLACE FANCY MATH WITH BETTER ENEMY AI
+	opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
+	 */
 
 	for (var i = 0; i < balls.length; i++) {
 		balls[i].update();
@@ -183,7 +181,7 @@ begin.destroy(true);
 }
 
 function wallCollision(obj1, obj2) {
-	if(obj2.name == "block"){
+	if (obj2.name == "block") {
 		obj2.kill();
 	}
 }
