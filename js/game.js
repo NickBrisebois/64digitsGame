@@ -15,6 +15,16 @@ var scoreRight = 0;
 var line, score, begin, ruleChangeAlert;
 
 
+//FPS stats
+var stats = new Stats();
+stats.setMode(1); 
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.left = '0px';
+stats.domElement.style.top = '0px';
+
+document.body.appendChild( stats.domElement );
+
+
 function gameStart() {
 	launch();
 	begin.destroy(true);
@@ -86,6 +96,10 @@ function create() {
 
 
 function update() {
+
+	//Fps meter stats begin
+	stats.begin();
+
 	//Update everything
 	game.physics.arcade.collide(paddles, ballsGroup);
 	game.physics.arcade.collide(ballsGroup, ballsGroup);
@@ -93,17 +107,21 @@ function update() {
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && !gameStarted) {
 		gameStart();
-	}
-	if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
+	}else {
+		if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
 
-		player.body.y += 10;
-	} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
-		player.body.y -= 10;
-	}
+			player.body.y += 10;
+		} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
+			player.body.y -= 10;
+		}
 
-	for (var i = 0; i < balls.length; i++) {
-		balls[i].update();
+		for (var i = 0; i < balls.length; i++) {
+			balls[i].update();
+		}
 	}
+	
+	//End FPS stats
+	stats.end();
 
 }
 
