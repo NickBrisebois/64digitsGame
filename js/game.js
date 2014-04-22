@@ -140,9 +140,11 @@ function alert(text) {
 	});
 
 	game.time.events.repeat(Phaser.Timer.SECOND*0.001, 4, function() {
+	if(rulechangeAlert!=null){
 		ruleChangeAlert.align = "center";
 		ruleChangeAlert.fill = "#FFF";
 		ruleChangeAlert.fontSize += 4;
+		}
 	}, this)
 	
 	game.time.events.add(Phaser.Timer.SECOND * 3, function(){ruleChangeAlert.destroy(true)}, this);
