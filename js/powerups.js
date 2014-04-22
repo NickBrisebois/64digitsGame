@@ -9,13 +9,13 @@ var powerups={
 	wall : function(lastHit){
 		if(lastHit == "player") {
 			for (var i = 0; i < 60; i++) {
-				if(isEmpty(200, i)) {
+				if(isEmpty(200, i*10)) {
 					createBlock(200, i * 10, "block");
 				}
 			}
 		}else {
 			for (var i = 0; i < 60; i++) {
-				if(isEmpty(600, i)) {
+				if(isEmpty(600, i*10)) {
 					createBlock(600, i * 10, "block");
 				}
 			}
@@ -26,6 +26,7 @@ var powerups={
 }
 
 function isEmpty(x, y){
+	console.log("test");
     for(var i=0; i<blocks.children.length; i++){
         if(blocks.children[i].x == x && blocks.children[i].y == y){
            return false;
