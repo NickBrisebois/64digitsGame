@@ -68,8 +68,8 @@ function create() {
 		for (var ii = 0; ii < 4; ii++) {
 			powerChance = Math.random();
 			if(powerChance > 0.05) {
-				createBlock(ii * 10, i * 10, "block");
-				createBlock((ii * 10) + 760, i * 10, "block");
+				createBlock(ii * 10, i * 10, "multiblock");
+				createBlock((ii * 10) + 760, i * 10, "multiblock");
 			}else {
 				createBlock(ii * 10, i * 10, "multiblock");
 				createBlock((ii * 10) + 760, i * 10, "multiblock");
