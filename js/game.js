@@ -224,7 +224,7 @@ function wallCollision(obj1, obj2) {
 	if (obj2.name == "block") {
 		obj2.kill();
 	}else if(obj2.name == "multiblock"){
-		powerups.multiball();
+		powerups[game.rnd.integerInRange(0, powerups.length-1)]();
 		obj2.kill();
 	}
 }
