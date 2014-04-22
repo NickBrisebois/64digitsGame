@@ -134,7 +134,7 @@ function alert(text) {
 	}
 
 
-	ruleChangeAlert = game.add.text(game.world.centerX -120, game.world.centerY-200, text, {
+	ruleChangeAlert = game.add.text(game.world.centerX - text.length*12, game.world.centerY-200, text, {
 			font : "1px Arial",
 			fill : "#000",
 			align : "center"
