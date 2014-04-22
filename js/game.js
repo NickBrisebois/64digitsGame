@@ -120,14 +120,18 @@ function update() {
 	stats.end();
 
 }
-
+var increase;
+var remove;
 
 function alert(text) {
 	//Alert text
-
 	if(ruleChangeAlert != undefined) {
+	game.time.events.remove(increase);
+game.time.events.remove(remove);
+
 		ruleChangeAlert.destroy();
 	}
+
 
 	ruleChangeAlert = game.add.text(game.world.centerX -120, game.world.centerY-200, text, {
 			font : "1px Arial",
@@ -135,15 +139,16 @@ function alert(text) {
 			align : "center"
 	});
 
-	game.time.events.repeat(Phaser.Timer.SECOND*0.001, 4, function() {
+	increase = game.time.events.repeat(Phaser.Timer.SECOND*0.001, 4, function() {
 		if(ruleChangeAlert!=null){
 			ruleChangeAlert.align = "center";
 			ruleChangeAlert.fill = "#FFF";
 			ruleChangeAlert.fontSize += 4;
 		}
 	}, this)
+
+	remove = game.time.events.add(Phaser.Timer.SECOND * 3, function(){ruleChangeAlert.destroy(true)}, this);
 	
-	game.time.events.add(Phaser.Timer.SECOND * 3, function(){ruleChangeAlert.destroy(true)}, this);
 }
 
 
