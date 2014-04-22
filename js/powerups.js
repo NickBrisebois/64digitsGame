@@ -6,11 +6,17 @@ var powerups={
 		turn = !turn;
 	},
 
-	wall : function(){
-		for (var i = 0; i < 60; i++) {
-			createBlock(200, i * 10, "block");
+	wall : function(lastHit){
+		if(lastHit == "player") {
+			for (var i = 0; i < 60; i++) {
+				createBlock(200, i * 10, "block");
 			}
-			alert("WALL!");
-			turn = !turn;
+		}else {
+			for (var i = 0; i < 60; i++) {
+				createBlock(600, i * 10, "block");
+			}
+		}
+		alert("WALL!");
 	}
+
 }

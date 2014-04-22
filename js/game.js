@@ -1,8 +1,7 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 		preload : preload,
 		create : create,
-		update : update,
-		render : render
+		update : update
 	});
 
 var player, opponent, blocks;
@@ -13,6 +12,8 @@ var balls = new Array();
 var scoreLeft = 0;
 var scoreRight = 0;
 var line, score, begin, ruleChangeAlert;
+var increase;
+var remove;
 
 
 //FPS stats
@@ -33,6 +34,7 @@ function preload() {
 	game.load.image('ball', 'Images/ball.png');
 	game.load.image('block', 'Images/block.png');
 	game.load.image('multiblock', 'Images/multiblock.png');
+	game.load.image('wallblock', 'Images/wall.png');
 }
 
 
@@ -43,7 +45,9 @@ function create() {
 	ballsGroup = game.add.group();
 	blocks = game.add.group();
 	player = paddles.create(90, 30, 'paddle');
+	player.name = "player";
 	opponent = paddles.create(700, 30, 'paddle');
+	opponent.name = "opponent";
 	balls.push(new ball(game.world.centerX, 300));
 	balls.push(new ball(game.world.centerX, 330));
 	game.physics.enable(player, Phaser.Physics.ARCADE);
@@ -63,17 +67,18 @@ function create() {
 	for (var i = 0; i < 60; i++) {
 		for (var ii = 0; ii < 4; ii++) {
 			powerChance = Math.random();
-			if(powerChance > 0.05) {
+			if(powerChance > 0.1) {
+				createBlock(ii * 10, i * 10, "block");
+				createBlock((ii * 10) + 760, i * 10, "block");
+			}else if(powerChance > 0.05){
 				createBlock(ii * 10, i * 10, "multiblock");
 				createBlock((ii * 10) + 760, i * 10, "multiblock");
-			}else {
-				createBlock(ii * 10, i * 10, "multiblock");
-				createBlock((ii * 10) + 760, i * 10, "multiblock");
+			}else{
+				createBlock(ii * 10, i * 10, "wallblock");
+				createBlock((ii * 10) + 760, i * 10, "wallblock");
 			}
 		}
 	}
-
-	game.physics.enable(blocks, Phaser.Physics.ARCADE);
 
 	scoreLeft = game.add.text(game.world.centerX - 65, 0, "0", {
 			font : "65px Arial",
@@ -97,9 +102,8 @@ function update() {
 	stats.begin();
 
 	//Update everything
-	game.physics.arcade.collide(paddles, ballsGroup);
-	game.physics.arcade.collide(ballsGroup, ballsGroup);
-	game.physics.arcade.collide(ballsGroup, blocks, wallCollision, null, this);
+	game.physics.arcade.collide(paddles, ballsGroup, ballCollision, null, this);
+	game.physics.arcade.collide(ballsGroup, blocks, ballCollision, null, this);
 
 	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && !gameStarted) {
 		gameStart();
@@ -120,15 +124,12 @@ function update() {
 	stats.end();
 
 }
-var increase;
-var remove;
 
 function alert(text) {
 	//Alert text
 	if(ruleChangeAlert != undefined) {
-	game.time.events.remove(increase);
-game.time.events.remove(remove);
-
+		game.time.events.remove(increase);
+		game.time.events.remove(remove);
 		ruleChangeAlert.destroy();
 	}
 
@@ -174,17 +175,12 @@ function score(side, ballObj) {
 
 function ball(x, y) {
 	this.ball = ballsGroup.create(x, y, 'ball');
-
-	this.ball.anchor.set(0.5);
+	this.ball.name = "ball";
+	this.ball.lastHit = "player";
 	game.physics.enable(this.ball, Phaser.Physics.ARCADE);
 	this.ball.body.collideWorldBounds = true;
-	this.ball.body.bounce.setTo(1.01, 1.01);
+	this.ball.body.bounce.setTo(1, 1);
 
-	this.launch = function () {
-		XVector =  - (game.input.x - this.ball.x);
-		YVector =  - (game.input.y - this.ball.y);
-		this.ball.body.velocity.setTo(XVector, YVector);
-	}
 	this.autoLaunch = function (side) {
 		if (side) {
 			game.time.events.add(Phaser.Timer.SECOND * 2, function () {
@@ -223,13 +219,26 @@ function createBlock(x, y, name) {
 }
 
 
-function wallCollision(obj1, obj2) {
+function ballCollision(obj1, obj2) {
+
+	//Paddle hit
+	if(obj1.name == "player") {
+		obj2.lastHit = "player";
+	}else if(obj1.name == "opponent"){
+		obj2.lastHit = "opponent";
+	}
+
+	//Powerups
 	if (obj2.name == "block") {
 		obj2.kill();
 	}else if(obj2.name == "multiblock"){
 		powerups.multiball();
 		obj2.kill();
+	}else if(obj2.name == "wallblock") {
+		powerups.wall(obj1.lastHit);
+		obj2.kill();
 	}
+
 }
 
 
@@ -241,9 +250,4 @@ function launch() {
 		}
 		gameStarted = true;
 	}
-}
-
-
-function render() {
-	game.debug.geom(line);
 }
