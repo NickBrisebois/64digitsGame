@@ -8,20 +8,29 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 var player, opponent, blocks;
 
 var gameStarted = false;
+var turn = true;
 var balls = new Array();
 var scoreLeft = 0;
-var line;
-var score;
 var scoreRight = 0;
-var begin;
+var line, score, begin, ruleChangeAlert;
+
+
+function gameStart() {
+	launch();
+	begin.destroy(true);
+}
+
 
 function preload() {
+	//Preload all images
 	game.load.image('paddle', 'Images/paddle.png');
 	game.load.image('ball', 'Images/ball.png');
 	game.load.image('block', 'Images/block.png');
 }
 
+
 function create() {
+	//Create everything
 	line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
 	paddles = game.add.group();
 	ballsGroup = game.add.group();
@@ -68,6 +77,69 @@ function create() {
 		});
 }
 
+
+function update() {
+	//Update everything
+	game.physics.arcade.collide(paddles, ballsGroup);
+	game.physics.arcade.collide(ballsGroup, ballsGroup);
+	game.physics.arcade.collide(ballsGroup, blocks, wallCollision, null, this);
+
+	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && !gameStarted) {
+		gameStart();
+	}
+	if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
+
+		player.body.y += 10;
+	} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
+		player.body.y -= 10;
+	}
+
+	for (var i = 0; i < balls.length; i++) {
+		balls[i].update();
+	}
+
+}
+
+
+function alert(text) {
+	//Alert text
+
+	ruleChangeAlert = game.add.text(game.world.centerX -120, game.world.centerY-200, text, {
+			font : "1px Arial",
+			fill : "#000",
+			align : "center"
+	});
+
+	game.time.events.repeat(Phaser.Timer.SECOND*0.001, 4, function() {
+		ruleChangeAlert.align = "center";
+		ruleChangeAlert.fill = "#FFF";
+		ruleChangeAlert.fontSize += 4;
+	}, this)
+	
+	game.time.events.add(Phaser.Timer.SECOND * 3, function(){ruleChangeAlert.destroy(true)}, this);
+}
+
+
+function score(side, ballObj) {
+
+	ballObj.ball.kill();
+
+	var index = balls.indexOf(ballObj);
+	if (index > -1) {
+		balls.splice(index, 1);
+	}
+	if (side) {
+		scoreRight.text++;
+	} else {
+		scoreLeft.text++;
+	}
+	if (balls.length == 0) {
+		spawnBall(side);
+	}
+
+}
+
+
 function ball(x, y) {
 	this.ball = ballsGroup.create(x, y, 'ball');
 
@@ -95,23 +167,20 @@ function ball(x, y) {
 	}
 	this.update = function () {
 		if (this.ball.x >= 785) {
+			alert("+1 point");
 			score(false, this);
 		} else if (this.ball.x <= 10) {
+			alert("+1 point for opponent");
 			score(true, this);
 		}
-
-		if (500 > this.ball.body.velocity.x < -500) {
-			if (500 > this.ball.body.velocity.y < -500) {
-				/*
-				===================
-				SLOW DOWN THE BALLS HERE
-				===================
-				 */
-			}
-		}
-
 	}
 }
+
+
+function spawnBall(side) {
+	balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 400)).autoLaunch(side));
+}
+
 
 function createBlock(x, y) {
 	this.block = blocks.create(x, y, 'block');
@@ -119,88 +188,26 @@ function createBlock(x, y) {
 	game.physics.enable(this.block, Phaser.Physics.ARCADE);
 	this.block.body.immovable = true;
 }
-function gameStart() {
-	launch();
-	begin.destroy(true);
-	game.time.events.loop(Phaser.Timer.SECOND * 5, ruleLoop, this);
-}
-var turn = true;
-function ruleLoop() {
-	spawnBall(turn);
-	var ruleChangeAlert = game.add.text(game.world.centerX -120, game.world.centerY-200, "Multiball!", {
-			font : "65px Arial",
-			fill : "#ffffff",
-			align : "center"
-		});
-		   game.time.events.add(Phaser.Timer.SECOND * 3, function(){ruleChangeAlert.destroy(true)}, this);
 
-
-	turn = !turn;
-}
-function score(side, ballObj) {
-
-	ballObj.ball.kill();
-
-	var index = balls.indexOf(ballObj);
-	if (index > -1) {
-		balls.splice(index, 1);
-	}
-	if (side) {
-		scoreRight.text++;
-	} else {
-		scoreLeft.text++;
-	}
-	if (balls.length == 0) {
-		spawnBall(side);
-	}
-
-}
-function spawnBall(side) {
-	balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 400)).autoLaunch(side));
-}
-function launch() {
-	if (!gameStarted) {
-		for (var i = 0; i < balls.length; i++) {
-			balls[i].autoLaunch(true);
-		}
-		gameStarted = true;
-	}
-}
-
-function render() {
-
-	game.debug.geom(line);
-
-}
-function update() {
-
-	game.physics.arcade.collide(paddles, ballsGroup);
-	game.physics.arcade.collide(ballsGroup, ballsGroup);
-	game.physics.arcade.collide(ballsGroup, blocks, wallCollision, null, this);
-
-	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && !gameStarted) {
-		gameStart();
-	}
-	if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
-
-		player.body.y += 10;
-	} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
-		player.body.y -= 10;
-	}
-
-	/*
-	REPLACE FANCY MATH WITH BETTER ENEMY AI
-	opponent.body.y -= Math.cos(Math.atan2(opponent.body.x - ball.body.x, opponent.body.y - ball.body.y)) * 3;
-	 */
-
-	for (var i = 0; i < balls.length; i++) {
-		balls[i].update();
-	}
-
-}
 
 function wallCollision(obj1, obj2) {
 	if (obj2.name == "block") {
 		obj2.kill();
 	}
+}
+
+
+function launch() {
+	if (!gameStarted) {
+		for (var i = 0; i < balls.length; i++) {
+			balls[i].autoLaunch(true);
+			alert("Start");
+		}
+		gameStarted = true;
+	}
+}
+
+
+function render() {
+	game.debug.geom(line);
 }
