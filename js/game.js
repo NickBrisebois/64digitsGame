@@ -110,24 +110,19 @@ function update() {
 
 function alert(text) {
 	//Alert text
-
-	if(ruleChangeAlert != undefined) {
-		ruleChangeAlert.destroy(true);
-	}
-
-	ruleChangeAlert = game.add.text(game.world.centerX -120, game.world.centerY-200, text, {
+	this.ruleChangeAlert = game.add.text(game.world.centerX -120, game.world.centerY-200, text, {
 			font : "1px Arial",
 			fill : "#000",
 			align : "center"
 	});
 
 	game.time.events.repeat(Phaser.Timer.SECOND*0.001, 4, function() {
-		ruleChangeAlert.align = "center";
-		ruleChangeAlert.fill = "#FFF";
-		ruleChangeAlert.fontSize += 4;
+		this.ruleChangeAlert.align = "center";
+		this.ruleChangeAlert.fill = "#FFF";
+		this.ruleChangeAlert.fontSize += 4;
 	}, this)
 	
-	game.time.events.add(Phaser.Timer.SECOND * 3, function(){ruleChangeAlert.destroy(true)}, this);
+	game.time.events.add(Phaser.Timer.SECOND * 3, function(){this.ruleChangeAlert.destroy(true)}, this);
 }
 
 
