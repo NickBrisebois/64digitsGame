@@ -136,10 +136,10 @@ function alert(text) {
 	});
 
 	game.time.events.repeat(Phaser.Timer.SECOND*0.001, 4, function() {
-	if(ruleChangeAlert!=null){
-		ruleChangeAlert.align = "center";
-		ruleChangeAlert.fill = "#FFF";
-		ruleChangeAlert.fontSize += 4;
+		if(ruleChangeAlert!=null){
+			ruleChangeAlert.align = "center";
+			ruleChangeAlert.fill = "#FFF";
+			ruleChangeAlert.fontSize += 4;
 		}
 	}, this)
 	
@@ -222,7 +222,7 @@ function wallCollision(obj1, obj2) {
 	if (obj2.name == "block") {
 		obj2.kill();
 	}else if(obj2.name == "multiblock"){
-		powerups[game.rnd.integerInRange(0, powerups.length-1)]();
+		powerups.multiball();
 		obj2.kill();
 	}
 }
