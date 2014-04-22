@@ -230,13 +230,13 @@ function ballCollision(obj1, obj2) {
 
 	//Powerups
 	if (obj2.name == "block") {
-		obj2.kill();
+		obj2.destroy();
 	}else if(obj2.name == "multiblock"){
 		powerups.multiball();
-		obj2.kill();
+		obj2.destroy();
 	}else if(obj2.name == "wallblock") {
 		powerups.wall(obj1.lastHit);
-		obj2.kill();
+		obj2.destroy();
 	}
 
 }

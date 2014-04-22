@@ -26,12 +26,13 @@ var powerups={
 }
 
 function isEmpty(x, y){
-	console.log("test");
+	this.x = x;
+	this.y = y;
     for(var i=0; i<blocks.children.length; i++){
-        if(blocks.children[i].x == x && blocks.children[i].y == y){
+        if(blocks.children[i].x == this.x && blocks.children[i].y == this.y){
+           console.log("test");
            return false;
-        }else {
-        	return true;
         }
     }   
+    return true;
 }
