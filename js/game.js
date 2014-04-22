@@ -18,10 +18,6 @@ var line, score, begin, ruleChangeAlert;
 //FPS stats
 var stats = new Stats();
 stats.setMode(1); 
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.left = '0px';
-stats.domElement.style.top = '0px';
-
 document.body.appendChild( stats.domElement );
 
 
