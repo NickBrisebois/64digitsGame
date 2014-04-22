@@ -26,6 +26,7 @@ function preload() {
 	game.load.image('paddle', 'Images/paddle.png');
 	game.load.image('ball', 'Images/ball.png');
 	game.load.image('block', 'Images/block.png');
+	game.load.image('multiblock', 'Images/multiblock.png');
 }
 
 
@@ -55,8 +56,14 @@ function create() {
 
 	for (var i = 0; i < 60; i++) {
 		for (var ii = 0; ii < 4; ii++) {
-			createBlock(ii * 10, i * 10);
-			createBlock((ii * 10) + 760, i * 10);
+			powerChance = Math.random();
+			if(powerChance > 0.05) {
+				createBlock(ii * 10, i * 10, "block");
+				createBlock((ii * 10) + 760, i * 10, "block");
+			}else {
+				createBlock(ii * 10, i * 10, "multiblock");
+				createBlock((ii * 10) + 760, i * 10, "multiblock");
+			}
 		}
 	}
 
@@ -147,6 +154,7 @@ function ball(x, y) {
 	game.physics.enable(this.ball, Phaser.Physics.ARCADE);
 	this.ball.body.collideWorldBounds = true;
 	this.ball.body.bounce.setTo(1.01, 1.01);
+
 	this.launch = function () {
 		XVector =  - (game.input.x - this.ball.x);
 		YVector =  - (game.input.y - this.ball.y);
@@ -182,9 +190,9 @@ function spawnBall(side) {
 }
 
 
-function createBlock(x, y) {
-	this.block = blocks.create(x, y, 'block');
-	this.block.name = "block";
+function createBlock(x, y, name) {
+	this.block = blocks.create(x, y, name);
+	this.block.name = name;
 	game.physics.enable(this.block, Phaser.Physics.ARCADE);
 	this.block.body.immovable = true;
 }
@@ -192,6 +200,9 @@ function createBlock(x, y) {
 
 function wallCollision(obj1, obj2) {
 	if (obj2.name == "block") {
+		obj2.kill();
+	}else if(obj2.name == "multiblock"){
+		powerups.multiball();
 		obj2.kill();
 	}
 }
