@@ -111,6 +111,10 @@ function update() {
 function alert(text) {
 	//Alert text
 
+	if(ruleChangeAlert != undefined) {
+		ruleChangeAlert.destroy(true);
+	}
+
 	ruleChangeAlert = game.add.text(game.world.centerX -120, game.world.centerY-200, text, {
 			font : "1px Arial",
 			fill : "#000",
