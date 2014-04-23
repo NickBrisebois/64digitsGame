@@ -14,6 +14,7 @@ var scoreRight = 0;
 var line, score, begin, ruleChangeAlert;
 var increase;
 var remove;
+var emitter;
 
 
 //FPS stats
@@ -40,6 +41,7 @@ function preload() {
 
 function create() {
 	//Create everything
+	emitter = game.add.emitter(0, 0, 100);
 	line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
 	paddles = game.add.group();
 	ballsGroup = game.add.group();
@@ -119,6 +121,8 @@ function update() {
 			balls[i].update();
 		}
 	}
+
+	botAI();
 	
 	//End FPS stats
 	stats.end();
@@ -155,7 +159,7 @@ function alert(text) {
 
 function score(side, ballObj) {
 
-	ballObj.ball.kill();
+	ballObj.ball.destroy();
 
 	var index = balls.indexOf(ballObj);
 	if (index > -1) {
@@ -250,4 +254,19 @@ function launch() {
 		}
 		gameStarted = true;
 	}
+}
+
+function botAI() {
+	this.closestBall = balls[0];
+	for(var i=0; i<balls.length; i++) {
+		if( (balls[i].ball.x - opponent.x > this.closestBall.ball.x - opponent.x+(opponent.height/2)) || (balls[i].ball.y - opponent.y > this.closestBall.ball.y - opponent.y+(opponent.height/2)) ) {
+			if(balls[i].ball.x < opponent.x) {
+				this.closestBall = balls[i];
+			}
+		}
+	}
+
+	
+
+	opponent.body.y -= Math.floor(Math.cos(Math.atan2(opponent.body.x - this.closestBall.ball.body.x, opponent.body.y+(opponent.height/2) - this.closestBall.ball.body.y)) * 10);
 }

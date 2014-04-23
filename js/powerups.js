@@ -26,11 +26,11 @@ var powerups={
 }
 
 function isEmpty(x, y){
+	//Checks if space already has a block so walls don't overlap each other
 	this.x = x;
 	this.y = y;
     for(var i=0; i<blocks.children.length; i++){
         if(blocks.children[i].x == this.x && blocks.children[i].y == this.y){
-           console.log("test");
            return false;
         }
     }   
