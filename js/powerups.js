@@ -21,9 +21,29 @@ var powerups={
 			}
 		}
 		alert("WALL!");
+	},
+
+	paddleShrink : function(lastHit){
+		alert("Smaller Paddle!");
+
+		if(lastHit == "player") {
+			player.scale.y = 0.5;
+		}else {
+			opponent.scale.y = 0.5;
+		}
+
+		game.time.events.add(Phaser.Timer.SECOND * 10, function(){
+			alert("Paddle size restored!");
+			if(lastHit == "player") {
+				player.scale.y = 1;
+			}else {
+				opponent.scale.y = 1;
+			}
+		}, this);
 	}
 
 }
+
 
 function isEmpty(x, y){
 	//Checks if space already has a block so walls don't overlap each other

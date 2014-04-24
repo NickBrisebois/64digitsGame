@@ -14,7 +14,6 @@ var scoreRight = 0;
 var line, score, begin, ruleChangeAlert;
 var increase;
 var remove;
-var emitter;
 
 
 //FPS stats
@@ -41,8 +40,6 @@ function preload() {
 
 function create() {
 	//Create everything
-	emitter = game.add.emitter(0, 0, 100);
-	line = new Phaser.Line(game.world.centerX, 0, game.world.centerX, 600);
 	paddles = game.add.group();
 	ballsGroup = game.add.group();
 	blocks = game.add.group();
@@ -51,7 +48,6 @@ function create() {
 	opponent = paddles.create(700, 30, 'paddle');
 	opponent.name = "opponent";
 	balls.push(new ball(game.world.centerX, 300));
-	balls.push(new ball(game.world.centerX, 330));
 	game.physics.enable(player, Phaser.Physics.ARCADE);
 	game.physics.enable(opponent, Phaser.Physics.ARCADE);
 
@@ -60,11 +56,6 @@ function create() {
 
 	player.body.immovable = true;
 	opponent.body.immovable = true;
-
-	player.body.bounce.setTo(1, 1);
-	opponent.body.bounce.setTo(1, 1);
-
-	game.input.keyboard.addKeyCapture([Phaser.Keyboard.W, Phaser.Keyboard.S, Phaser.Keyboard.SPACEBAR]);
 
 	for (var i = 0; i < 60; i++) {
 		for (var ii = 0; ii < 4; ii++) {
@@ -107,11 +98,8 @@ function update() {
 	game.physics.arcade.collide(paddles, ballsGroup, ballCollision, null, this);
 	game.physics.arcade.collide(ballsGroup, blocks, ballCollision, null, this);
 
-	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && !gameStarted) {
-		gameStart();
-	}else {
+	if (gameStarted) {
 		if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
-
 			player.body.y += 10;
 		} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
 			player.body.y -= 10;
@@ -120,6 +108,8 @@ function update() {
 		for (var i = 0; i < balls.length; i++) {
 			balls[i].update();
 		}
+	}else if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+		gameStart();
 	}
 
 	botAI();
@@ -138,7 +128,7 @@ function alert(text) {
 	}
 
 
-	ruleChangeAlert = game.add.text(game.world.centerX - text.length*12, game.world.centerY-200, text, {
+	ruleChangeAlert = game.add.text(game.world.centerX - (text.length*12), game.world.centerY-200, text, {
 			font : "1px Arial",
 			fill : "#000",
 			align : "center"
@@ -256,6 +246,7 @@ function launch() {
 	}
 }
 
+
 function botAI() {
 	this.closestBall = balls[0];
 	for(var i=0; i<balls.length; i++) {
@@ -265,8 +256,5 @@ function botAI() {
 			}
 		}
 	}
-
-	
-
 	opponent.body.y -= Math.floor(Math.cos(Math.atan2(opponent.body.x - this.closestBall.ball.body.x, opponent.body.y+(opponent.height/2) - this.closestBall.ball.body.y)) * 10);
 }
