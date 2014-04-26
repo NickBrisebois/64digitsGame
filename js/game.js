@@ -152,14 +152,17 @@ function score(side, ballObj) {
 	ballObj.ball.destroy();
 
 	var index = balls.indexOf(ballObj);
+	
 	if (index > -1) {
 		balls.splice(index, 1);
 	}
+
 	if (side) {
 		scoreRight.text++;
 	} else {
 		scoreLeft.text++;
 	}
+	
 	if (balls.length == 0) {
 		spawnBall(side);
 	}

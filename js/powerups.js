@@ -40,7 +40,28 @@ var powerups={
 				opponent.scale.y = 1;
 			}
 		}, this);
+	},
+
+	paddleGrow : function(lastHit) {
+		alert("Bigger Paddle!");
+
+		if(lastHit == "player") {
+			player.scale.y = 2;
+		}else {
+			opponent.scale.y = 2;
+		}
+
+		game.time.events.add(Phaser.Timer.SECOND * 10, function() {
+			alert("Paddle size restored!");
+			if(lastHit == "player") {
+				player.scale.y = 1;
+			}else {
+				opponent.scale.y = 1;
+			}
+		}, this);
 	}
+
+
 
 }
 
