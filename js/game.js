@@ -98,10 +98,10 @@ function update() {
 		game.physics.arcade.collide(paddles, ballsGroup, ballCollision, null, this);
 		game.physics.arcade.collide(ballsGroup, blocks, powerCollision, null, this);
 
-		if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
-			player.body.y += 10;
-		} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
-			player.body.y -= 10;
+		if (game.input.keyboard.isDown(Phaser.Keyboard.S)) {
+			player.body.y += 15;
+		} else if (game.input.keyboard.isDown(Phaser.Keyboard.W)) {
+			player.body.y -= 15;
 		}
 
 		for (var i = 0; i < balls.length; i++) {
@@ -127,7 +127,7 @@ function update() {
 
 }
 
-function alert(text) {
+function alert(text, perm) {
 	//Alert text
 	if (ruleChangeAlert != undefined) {
 		game.time.events.remove(increase);
@@ -148,11 +148,11 @@ function alert(text) {
 				ruleChangeAlert.fontSize += 4;
 			}
 		}, this)
-
+if(!perm){
 		remove = game.time.events.add(Phaser.Timer.SECOND * 3, function () {
 			ruleChangeAlert.destroy(true)
 		}, this);
-
+}
 }
 
 function score(side, ballObj) {
@@ -167,8 +167,16 @@ function score(side, ballObj) {
 
 	if (side) {
 		scoreRight.text++;
+		if(scoreRight.text >=10){
+		alert("Right is WIN!\nSpace To Restart", true);
+		gameStarted=false;
+		}
 	} else {
 		scoreLeft.text++;
+				if(scoreLeft.text >=10){
+		alert("Left is WON!\nSpace To Restart", true);
+		gameStarted=false;
+		}
 	}
 
 	if (balls.length == 0) {
@@ -198,7 +206,7 @@ function ball(x, y) {
 		return this;
 	}
 	this.update = function () {
-		if (this.ball.x >= 785) {
+		if (this.ball.x >= 790) {
 			alert("+1 point");
 			score(false, this);
 		} else if (this.ball.x <= 10) {

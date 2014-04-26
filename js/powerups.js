@@ -26,13 +26,13 @@ var powerups = {
 	smallWall : function (lastHit) {
 		if (lastHit == "player") {
 			for (var i = 0; i < 7; i++) {
-				if (isEmpty(170, i * 10)) {
-					createBlock(170, i* 10+opponent.y, "block").name = "temp";
+				if (isEmpty(170, i* 10+player.y)) {
+					createBlock(170, i* 10+player.y, "block").name = "temp";
 				}
 			}
 		} else {
 			for (var i = 0; i < 7; i++) {
-				if (isEmpty(630, i * 10)) {
+				if (isEmpty(630, i* 10+opponent.y)) {
 					createBlock(630, i* 10+opponent.y, "block").name = "temp";
 				}
 			}
@@ -42,8 +42,8 @@ var powerups = {
 	horWall : function (lastHit) {
 
 		for (var i = 0; i < 100; i++) {
-			if (isEmpty(200, i * 10)) {
-				createBlock(i * 10, game.world.centerX, "block").name = "temp";
+			if (isEmpty(i * 10, game.world.centerY)) {
+				createBlock(i * 10, game.world.centerY, "block").name = "temp";
 			}
 		}
 
@@ -52,8 +52,8 @@ var powerups = {
 	centerWall : function (lastHit) {
 
 		for (var i = 0; i < 60; i++) {
-			if (isEmpty(200, i * 10)) {
-				createBlock(game.world.centerY, i * 10, "block").name = "temp";
+			if (isEmpty(game.world.centerX, i * 10)) {
+				createBlock(game.world.centerX, i * 10, "block").name = "temp";
 			}
 		}
 
@@ -85,7 +85,11 @@ var powerups = {
 				}
 			}, this);
 		},
+		BGColor : function (lastHit) {
+			alert("Colour Change!");
 
+			game.stage.backgroundColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);;
+		},
 		paddleGrow : function (lastHit) {
 			alert("Bigger Paddle!");
 
@@ -101,24 +105,6 @@ var powerups = {
 					player.scale.y = 1;
 				} else {
 					opponent.scale.y = 1;
-				}
-			}, this);
-		},
-		paddleShrink : function (lastHit) {
-			alert("Smaller Paddle!");
-
-			if (lastHit == "player") {
-				opponent.scale.y = 0.5;
-			} else {
-				player.scale.y = 0.5;
-			}
-
-			game.time.events.add(Phaser.Timer.SECOND * 10, function () {
-				alert("Paddle size restored!");
-				if (lastHit == "player") {
-					opponent.scale.y = 1;
-				} else {
-					player.scale.y = 1;
 				}
 			}, this);
 		}
