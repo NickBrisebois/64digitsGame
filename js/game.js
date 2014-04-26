@@ -242,9 +242,9 @@ function launch() {
 		gameStarted = true;
 	}
 }
-
+var closestBall = balls[0];
 function botAI() {
-	var closestBall = balls[0];
+	
 	for (var i = 0; i < balls.length; i++) {
 		if (balls[i].ball.body.velocity.x > 0) {
 			if ((balls[i].ball.x - opponent.x > closestBall.ball.x - opponent.x + (opponent.height / 2)) || (balls[i].ball.y - opponent.y > closestBall.ball.y - opponent.y + (opponent.height / 2))) {
