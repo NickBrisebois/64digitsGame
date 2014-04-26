@@ -102,8 +102,25 @@ var powerups = {
 					opponent.scale.y = 1;
 				}
 			}, this);
-		}
+		},
+		paddleShrink : function (lastHit) {
+			alert("Smaller Paddle!");
 
+			if (lastHit == "player") {
+				opponent.scale.y = 2;
+			} else {
+				player.scale.y = 2;
+			}
+
+			game.time.events.add(Phaser.Timer.SECOND * 10, function () {
+				alert("Paddle size restored!");
+				if (lastHit == "player") {
+					opponent.scale.y = 1;
+				} else {
+					player.scale.y = 1;
+				}
+			}, this);
+		}
 	}
 
 	function isEmpty(x, y) {
