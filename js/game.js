@@ -96,7 +96,7 @@ function update() {
 
 	//Update everything
 	game.physics.arcade.collide(paddles, ballsGroup, ballCollision, null, this);
-	game.physics.arcade.collide(ballsGroup, blocks, ballCollision, null, this);
+	game.physics.arcade.collide(ballsGroup, blocks, powerCollision, null, this);
 
 	if (gameStarted) {
 		if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
@@ -166,24 +166,23 @@ function score(side, ballObj) {
 
 }
 
-
 function ball(x, y) {
 	this.ball = ballsGroup.create(x, y, 'ball');
 	this.ball.name = "ball";
 	this.ball.lastHit = "player";
 	game.physics.enable(this.ball, Phaser.Physics.ARCADE);
 	this.ball.body.collideWorldBounds = true;
-	this.ball.body.bounce.setTo(1, 1);
+	this.ball.body.bounce.setTo(1.01, 1.01);
 
 	this.autoLaunch = function (side) {
 		if (side) {
 			game.time.events.add(Phaser.Timer.SECOND * 2, function () {
-				this.ball.body.velocity.setTo(-400, game.rnd.integerInRange(-150, 150))
+				this.ball.body.velocity.setTo(-500, game.rnd.integerInRange(-150, 150))
 			}, this);
 
 		} else {
 			game.time.events.add(Phaser.Timer.SECOND * 2, function () {
-				this.ball.body.velocity.setTo(400, game.rnd.integerInRange(-150, 150))
+				this.ball.body.velocity.setTo(500, game.rnd.integerInRange(-150, 150))
 			}, this); ;
 		}
 		return this;
@@ -221,6 +220,12 @@ function ballCollision(obj1, obj2) {
 	}else if(obj1.name == "opponent"){
 		obj2.lastHit = "opponent";
 	}
+obj2.body.velocity.setTo(obj2.body.velocity.x, obj2.body.velocity.y+game.rnd.integerInRange(-100, 100));
+
+}
+function powerCollision(obj1, obj2) {
+
+	
 
 	//Powerups
 	if (obj2.name == "block") {
@@ -232,9 +237,8 @@ function ballCollision(obj1, obj2) {
 		powerups.wall(obj1.lastHit);
 		obj2.destroy();
 	}
-
+  
 }
-
 
 function launch() {
 	if (!gameStarted) {
