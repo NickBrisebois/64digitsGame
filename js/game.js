@@ -44,7 +44,7 @@ function create() {
 	player.name = "player";
 	opponent = paddles.create(700, 30, 'paddle');
 	opponent.name = "opponent";
-	balls.push(new ball(game.world.centerX, 300));
+	
 	game.physics.enable(player, Phaser.Physics.ARCADE);
 	game.physics.enable(opponent, Phaser.Physics.ARCADE);
 
@@ -54,7 +54,30 @@ function create() {
 	player.body.immovable = true;
 	opponent.body.immovable = true;
 
-	for (var i = 0; i < 60; i++) {
+reset();
+
+	scoreLeft = game.add.text(game.world.centerX - 65, 0, "0", {
+			font : "65px Arial",
+			fill : "#ffffff"
+		});
+	scoreRight = game.add.text(game.world.centerX + 30, 0, "0", {
+			font : "65px Arial",
+			fill : "#ffffff"
+		});
+	begin = game.add.text(game.world.centerX - 150, game.world.centerY - 100, "Spacebar To Start \n Get to 10 Points to Win!", {
+			font : "30px Arial",
+			fill : "#ffffff",
+			align : "center"
+		});
+}
+function reset(){
+gameStarted = false;
+turn = true;
+balls = new Array();
+scoreLeft = 0;
+scoreRight = 0;
+balls.push(new ball(game.world.centerX, 300));
+for (var i = 0; i < 60; i++) {
 		for (var ii = 0; ii < 4; ii++) {
 			powerChance = Math.random();
 			if (powerChance > 0.15) {
@@ -72,22 +95,7 @@ function create() {
 			}
 		}
 	}
-
-	scoreLeft = game.add.text(game.world.centerX - 65, 0, "0", {
-			font : "65px Arial",
-			fill : "#ffffff"
-		});
-	scoreRight = game.add.text(game.world.centerX + 30, 0, "0", {
-			font : "65px Arial",
-			fill : "#ffffff"
-		});
-	begin = game.add.text(game.world.centerX - 150, game.world.centerY - 100, "Spacebar To Start \n Get to 10 Points to Win!", {
-			font : "30px Arial",
-			fill : "#ffffff",
-			align : "center"
-		});
 }
-
 function update() {
 
 	//Fps meter stats begin
