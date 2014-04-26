@@ -35,6 +35,7 @@ function preload() {
 	game.load.image('block', 'Images/block.png');
 	game.load.image('multiblock', 'Images/multiblock.png');
 	game.load.image('wallblock', 'Images/wall.png');
+	game.load.image('scaleBall', 'Images/scaleBall.png');
 }
 
 
@@ -226,9 +227,9 @@ function ballCollision(obj1, obj2) {
 obj2.body.velocity.setTo(obj2.body.velocity.x, obj2.body.velocity.y+game.rnd.integerInRange(-100, 100));
 
 }
-function powerCollision(obj1, obj2) {
 
-	
+
+function powerCollision(obj1, obj2) {
 
 	//Powerups
 	if (obj2.name == "block") {
