@@ -35,7 +35,7 @@ function preload() {
 	game.load.image('block', 'Images/block.png');
 	game.load.image('multiblock', 'Images/multiblock.png');
 	game.load.image('wallblock', 'Images/wall.png');
-	game.load.image('scaleBall', 'Images/scaleBall.png');
+	game.load.image('scalePaddle', 'Images/scalePaddle.png');
 }
 
 
@@ -61,12 +61,15 @@ function create() {
 	for (var i = 0; i < 60; i++) {
 		for (var ii = 0; ii < 4; ii++) {
 			powerChance = Math.random();
-			if(powerChance > 0.1) {
+			if(powerChance > 0.15) {
 				createBlock(ii * 10, i * 10, "block");
 				createBlock((ii * 10) + 760, i * 10, "block");
-			}else if(powerChance > 0.05){
+			}else if(powerChance > 0.1){
 				createBlock(ii * 10, i * 10, "multiblock");
 				createBlock((ii * 10) + 760, i * 10, "multiblock");
+			}else if(powerChance > 0.5){
+				createBlock(ii * 10, i * 10, "scalePaddle");
+				createBlock(ii * 10, i * 10, "scalePaddle");
 			}else{
 				createBlock(ii * 10, i * 10, "wallblock");
 				createBlock((ii * 10) + 760, i * 10, "wallblock");
