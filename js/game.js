@@ -164,9 +164,9 @@ if(!perm){
 }
 
 function score(side, ballObj) {
-
+if(ballObj!=null){
 	ballObj.ball.destroy();
-
+}
 	var index = balls.indexOf(ballObj);
 
 	if (index > -1) {
@@ -233,11 +233,13 @@ function spawnBigBall(side) {
 }
 
 function createBlock(x, y, name) {
+if(isEmpty(x,y)){
 	this.block = blocks.create(x, y, name);
 	this.block.name = name;
 	game.physics.enable(this.block, Phaser.Physics.ARCADE);
 	this.block.body.immovable = true;
 	return this.block;
+	}
 }
 
 function ballCollision(obj1, obj2) {
