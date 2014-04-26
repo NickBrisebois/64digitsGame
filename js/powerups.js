@@ -2,7 +2,7 @@ var powerups={
 
 	multiball : function(){
 		spawnBall(turn);
-		alert("Multiball!");
+		alert("New Ball!");
 		turn = !turn;
 	},
 
