@@ -15,18 +15,15 @@ var line, score, begin, ruleChangeAlert;
 var increase;
 var remove;
 
-
 //FPS stats
 var stats = new Stats();
-stats.setMode(1); 
-document.body.appendChild( stats.domElement );
-
+stats.setMode(1);
+document.body.appendChild(stats.domElement);
 
 function gameStart() {
 	launch();
 	begin.destroy(true);
 }
-
 
 function preload() {
 	//Preload all images
@@ -37,7 +34,6 @@ function preload() {
 	game.load.image('wallblock', 'Images/wall.png');
 	game.load.image('scalePaddle', 'Images/scalePaddle.png');
 }
-
 
 function create() {
 	//Create everything
@@ -61,6 +57,7 @@ function create() {
 	for (var i = 0; i < 60; i++) {
 		for (var ii = 0; ii < 4; ii++) {
 			powerChance = Math.random();
+<<<<<<< HEAD
 			if(powerChance > 0.15) {
 				createBlock(ii * 10, i * 10, "block");
 				createBlock((ii * 10) + 760, i * 10, "block");
@@ -71,6 +68,15 @@ function create() {
 				createBlock(ii * 10, i * 10, "scalePaddle");
 				createBlock(ii * 10, i * 10, "scalePaddle");
 			}else{
+=======
+			if (powerChance > 0.1) {
+				createBlock(ii * 10, i * 10, "block");
+				createBlock((ii * 10) + 760, i * 10, "block");
+			} else if (powerChance > 0.05) {
+				createBlock(ii * 10, i * 10, "multiblock");
+				createBlock((ii * 10) + 760, i * 10, "multiblock");
+			} else {
+>>>>>>> c5cc48bf5fd7ff45b2d2d4ec791ba62cb2090c5e
 				createBlock(ii * 10, i * 10, "wallblock");
 				createBlock((ii * 10) + 760, i * 10, "wallblock");
 			}
@@ -92,17 +98,16 @@ function create() {
 		});
 }
 
-
 function update() {
 
 	//Fps meter stats begin
 	stats.begin();
 
 	//Update everything
-	game.physics.arcade.collide(paddles, ballsGroup, ballCollision, null, this);
-	game.physics.arcade.collide(ballsGroup, blocks, powerCollision, null, this);
-
 	if (gameStarted) {
+		game.physics.arcade.collide(paddles, ballsGroup, ballCollision, null, this);
+		game.physics.arcade.collide(ballsGroup, blocks, powerCollision, null, this);
+
 		if (game.input.keyboard.isDown(Phaser.Keyboard.S) && player.body.velocity.y < 200) {
 			player.body.y += 10;
 		} else if (game.input.keyboard.isDown(Phaser.Keyboard.W) && player.body.velocity.y > -200) {
@@ -112,51 +117,51 @@ function update() {
 		for (var i = 0; i < balls.length; i++) {
 			balls[i].update();
 		}
-	}else if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
-		gameStart();
-	}
+	
 
 	botAI();
-	
-	//End FPS stats
-	stats.end();
+} else if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+		gameStart();
+	}
+//End FPS stats
+stats.end();
 
 }
 
 function alert(text) {
 	//Alert text
-	if(ruleChangeAlert != undefined) {
+	if (ruleChangeAlert != undefined) {
 		game.time.events.remove(increase);
 		game.time.events.remove(remove);
 		ruleChangeAlert.destroy();
 	}
 
-
-	ruleChangeAlert = game.add.text(game.world.centerX - (text.length*12), game.world.centerY-200, text, {
+	ruleChangeAlert = game.add.text(game.world.centerX - (text.length * 12), game.world.centerY - 200, text, {
 			font : "1px Arial",
 			fill : "#000",
 			align : "center"
-	});
+		});
 
-	increase = game.time.events.repeat(Phaser.Timer.SECOND*0.001, 4, function() {
-		if(ruleChangeAlert!=null){
-			ruleChangeAlert.align = "center";
-			ruleChangeAlert.fill = "#FFF";
-			ruleChangeAlert.fontSize += 4;
-		}
-	}, this)
+	increase = game.time.events.repeat(Phaser.Timer.SECOND * 0.001, 4, function () {
+			if (ruleChangeAlert != null) {
+				ruleChangeAlert.align = "center";
+				ruleChangeAlert.fill = "#FFF";
+				ruleChangeAlert.fontSize += 4;
+			}
+		}, this)
 
-	remove = game.time.events.add(Phaser.Timer.SECOND * 3, function(){ruleChangeAlert.destroy(true)}, this);
-	
+		remove = game.time.events.add(Phaser.Timer.SECOND * 3, function () {
+			ruleChangeAlert.destroy(true)
+		}, this);
+
 }
-
 
 function score(side, ballObj) {
 
 	ballObj.ball.destroy();
 
 	var index = balls.indexOf(ballObj);
-	
+
 	if (index > -1) {
 		balls.splice(index, 1);
 	}
@@ -166,7 +171,7 @@ function score(side, ballObj) {
 	} else {
 		scoreLeft.text++;
 	}
-	
+
 	if (balls.length == 0) {
 		spawnBall(side);
 	}
@@ -205,11 +210,9 @@ function ball(x, y) {
 	}
 }
 
-
 function spawnBall(side) {
 	balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 400)).autoLaunch(side));
 }
-
 
 function createBlock(x, y, name) {
 	this.block = blocks.create(x, y, name);
@@ -218,33 +221,35 @@ function createBlock(x, y, name) {
 	this.block.body.immovable = true;
 }
 
-
 function ballCollision(obj1, obj2) {
 
 	//Paddle hit
-	if(obj1.name == "player") {
+	if (obj1.name == "player") {
 		obj2.lastHit = "player";
-	}else if(obj1.name == "opponent"){
+	} else if (obj1.name == "opponent") {
 		obj2.lastHit = "opponent";
 	}
-obj2.body.velocity.setTo(obj2.body.velocity.x, obj2.body.velocity.y+game.rnd.integerInRange(-100, 100));
+	obj2.body.velocity.setTo(obj2.body.velocity.x, obj2.body.velocity.y + game.rnd.integerInRange(-200, 200));
 
 }
 
+<<<<<<< HEAD
 
 function powerCollision(obj1, obj2) {
 
+=======
+>>>>>>> c5cc48bf5fd7ff45b2d2d4ec791ba62cb2090c5e
 	//Powerups
 	if (obj2.name == "block") {
 		obj2.destroy();
-	}else if(obj2.name == "multiblock"){
+	} else if (obj2.name == "multiblock") {
 		powerups.multiball();
 		obj2.destroy();
-	}else if(obj2.name == "wallblock") {
+	} else if (obj2.name == "wallblock") {
 		powerups.wall(obj1.lastHit);
 		obj2.destroy();
 	}
-  
+
 }
 
 function launch() {
@@ -257,15 +262,18 @@ function launch() {
 	}
 }
 
-
 function botAI() {
-	this.closestBall = balls[0];
-	for(var i=0; i<balls.length; i++) {
-		if( (balls[i].ball.x - opponent.x > this.closestBall.ball.x - opponent.x+(opponent.height/2)) || (balls[i].ball.y - opponent.y > this.closestBall.ball.y - opponent.y+(opponent.height/2)) ) {
-			if(balls[i].ball.x < opponent.x) {
-				this.closestBall = balls[i];
+	var closestBall = balls[0];
+	for (var i = 0; i < balls.length; i++) {
+		if (balls[i].ball.body.velocity.x > 0) {
+			if ((balls[i].ball.x - opponent.x > closestBall.ball.x - opponent.x + (opponent.height / 2)) || (balls[i].ball.y - opponent.y > closestBall.ball.y - opponent.y + (opponent.height / 2))) {
+				if (balls[i].ball.x < opponent.x) {
+					closestBall = balls[i];
+				}
 			}
 		}
 	}
-	opponent.body.y -= Math.floor(Math.cos(Math.atan2(opponent.body.x - this.closestBall.ball.body.x, opponent.body.y+(opponent.height/2) - this.closestBall.ball.body.y)) * 10);
+	
+	opponent.body.y -= Math.floor(Math.cos(Math.atan2(opponent.body.x - closestBall.ball.body.x, opponent.body.y + (opponent.height / 2) - closestBall.ball.body.y)) * 10);
+	
 }
