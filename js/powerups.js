@@ -10,13 +10,13 @@ var powerups = {
 		if (lastHit == "player") {
 			for (var i = 0; i < 60; i++) {
 				if (isEmpty(200, i * 10)) {
-					createBlock(200, i * 10, "block");
+					createBlock(200, i * 10, "block").name = "temp";
 				}
 			}
 		} else {
 			for (var i = 0; i < 60; i++) {
 				if (isEmpty(600, i * 10)) {
-					createBlock(600, i * 10, "block");
+					createBlock(600, i * 10, "block").name = "temp";
 				}
 			}
 		}
@@ -26,14 +26,14 @@ var powerups = {
 	smallWall : function (lastHit) {
 		if (lastHit == "player") {
 			for (var i = 0; i < 7; i++) {
-				if (isEmpty(200, i * 10)) {
-					createBlock(170, (i + opponent.y) * 10, "block");
+				if (isEmpty(170, i * 10)) {
+					createBlock(170, i* 10+opponent.y, "block").name = "temp";
 				}
 			}
 		} else {
-			for (var i = 0; i < 60; i++) {
-				if (isEmpty(600, i * 10)) {
-					createBlock(630, (i + opponent.y) * 10, "block");
+			for (var i = 0; i < 7; i++) {
+				if (isEmpty(630, i * 10)) {
+					createBlock(630, i* 10+opponent.y, "block").name = "temp";
 				}
 			}
 		}
@@ -41,9 +41,9 @@ var powerups = {
 	},
 	horWall : function (lastHit) {
 
-		for (var i = 0; i < 60; i++) {
+		for (var i = 0; i < 100; i++) {
 			if (isEmpty(200, i * 10)) {
-				createBlock(i * 10, game.world.centerX, "block");
+				createBlock(i * 10, game.world.centerX, "block").name = "temp";
 			}
 		}
 
@@ -53,18 +53,19 @@ var powerups = {
 
 		for (var i = 0; i < 60; i++) {
 			if (isEmpty(200, i * 10)) {
-				createBlock(game.world.centerY, i * 10, "block");
+				createBlock(game.world.centerY, i * 10, "block").name = "temp";
 			}
 		}
 
 		alert("(center)WALL!");
 	},
-	bigBall : function (lastHit) {
+//	bigBall : function (lastHit) {
 
-		spawnBall(lasthit, 2) {
+//		spawnBigBall(lastHit) 
 
-			alert("Big Ball!");
-		},
+//		alert("Big Ball!");
+		
+//		},
 
 		paddleShrink : function (lastHit) {
 			alert("Smaller Paddle!");
@@ -107,9 +108,9 @@ var powerups = {
 			alert("Smaller Paddle!");
 
 			if (lastHit == "player") {
-				opponent.scale.y = 2;
+				opponent.scale.y = 0.5;
 			} else {
-				player.scale.y = 2;
+				player.scale.y = 0.5;
 			}
 
 			game.time.events.add(Phaser.Timer.SECOND * 10, function () {

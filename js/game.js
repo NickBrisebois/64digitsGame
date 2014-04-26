@@ -4,7 +4,6 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 		update : update
 	});
 
-
 var player, opponent, blocks;
 
 var gameStarted = false;
@@ -21,12 +20,10 @@ var stats = new Stats();
 stats.setMode(1);
 document.body.appendChild(stats.domElement);
 
-
 function gameStart() {
 	launch();
 	begin.destroy(true);
 }
-
 
 function preload() {
 	//Preload all images
@@ -37,7 +34,6 @@ function preload() {
 	game.load.image('wallblock', 'Images/wall.png');
 	game.load.image('scalePaddle', 'Images/scalePaddle.png');
 }
-
 
 function create() {
 	//Create everything
@@ -61,16 +57,16 @@ function create() {
 	for (var i = 0; i < 60; i++) {
 		for (var ii = 0; ii < 4; ii++) {
 			powerChance = Math.random();
-			if(powerChance > 0.15) {
+			if (powerChance > 0.15) {
 				createBlock(ii * 10, i * 10, "block");
 				createBlock((ii * 10) + 760, i * 10, "block");
-			}else if(powerChance > 0.1){
+			} else if (powerChance > 0.1) {
 				createBlock(ii * 10, i * 10, "multiblock");
 				createBlock((ii * 10) + 760, i * 10, "multiblock");
-			}else if(powerChance > 0.05){
+			} else if (powerChance > 0.05) {
 				createBlock(ii * 10, i * 10, "scalePaddle");
 				createBlock((ii * 10) + 760, i * 10, "scalePaddle");
-			}else{
+			} else {
 				createBlock(ii * 10, i * 10, "wallblock");
 				createBlock((ii * 10) + 760, i * 10, "wallblock");
 			}
@@ -85,13 +81,12 @@ function create() {
 			font : "65px Arial",
 			fill : "#ffffff"
 		});
-	begin = game.add.text(game.world.centerX-150, game.world.centerY-100, "Spacebar To Start \n Get to 10 Points to Win!", {
+	begin = game.add.text(game.world.centerX - 150, game.world.centerY - 100, "Spacebar To Start \n Get to 10 Points to Win!", {
 			font : "30px Arial",
 			fill : "#ffffff",
 			align : "center"
 		});
 }
-
 
 function update() {
 
@@ -112,18 +107,16 @@ function update() {
 		for (var i = 0; i < balls.length; i++) {
 			balls[i].update();
 		}
-		
 
-		if(scoreRight == 10 || scoreLeft == 10) {
-			if(scoreRight > scoreLeft) {
+		if (scoreRight == 10 || scoreLeft == 10) {
+			if (scoreRight > scoreLeft) {
 				alert("You lose!");
 				gameStarted = false;
-			}else {
+			} else {
 				alert("Congratulations! You win!");
 				gameStarted = false;
 			}
 		}
-
 
 		botAI();
 	} else if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
@@ -133,7 +126,6 @@ function update() {
 	stats.end();
 
 }
-
 
 function alert(text) {
 	//Alert text
@@ -150,19 +142,18 @@ function alert(text) {
 		});
 
 	increase = game.time.events.repeat(Phaser.Timer.SECOND * 0.001, 4, function () {
-		if (ruleChangeAlert != null) {
-			ruleChangeAlert.align = "center";
-			ruleChangeAlert.fill = "#FFF";
-			ruleChangeAlert.fontSize += 4;
-		}
-	}, this)
+			if (ruleChangeAlert != null) {
+				ruleChangeAlert.align = "center";
+				ruleChangeAlert.fill = "#FFF";
+				ruleChangeAlert.fontSize += 4;
+			}
+		}, this)
 
-	remove = game.time.events.add(Phaser.Timer.SECOND * 3, function () {
-		ruleChangeAlert.destroy(true)
-	}, this);
+		remove = game.time.events.add(Phaser.Timer.SECOND * 3, function () {
+			ruleChangeAlert.destroy(true)
+		}, this);
 
 }
-
 
 function score(side, ballObj) {
 
@@ -184,7 +175,6 @@ function score(side, ballObj) {
 		spawnBall(side);
 	}
 }
-
 
 function ball(x, y) {
 	this.ball = ballsGroup.create(x, y, 'ball');
@@ -218,13 +208,12 @@ function ball(x, y) {
 	}
 }
 
-
 function spawnBall(side) {
 	balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 400)).autoLaunch(side));
 }
-function spawnBall(side, size) {
+function spawnBigBall(side) {
 	balls.push(new ball(game.world.centerX, game.world.centerY - 200 + game.rnd.integerInRange(0, 400)).autoLaunch(side));
-	balls[balls.length-1].ball.scale.setTo(size, size);
+	balls[balls.length - 1].ball.scale.setTo(2, 2);
 }
 
 function createBlock(x, y, name) {
@@ -232,6 +221,7 @@ function createBlock(x, y, name) {
 	this.block.name = name;
 	game.physics.enable(this.block, Phaser.Physics.ARCADE);
 	this.block.body.immovable = true;
+	return this.block;
 }
 
 function ballCollision(obj1, obj2) {
@@ -250,6 +240,16 @@ function powerCollision(obj1, obj2) {
 	//Powerups
 	if (obj2.name == "block") {
 		obj2.destroy();
+		var random = game.rnd.integerInRange(0, Object.keys(powerups).length-1);
+		var count = 0;
+		for (var key in powerups) {
+		//console.log("called: "+count+" "+ powerups.length);
+		if(count == random){
+			powerups[key](obj1.lastHit);
+			
+			}
+			count++;
+		}
 	} else if (obj2.name == "multiblock") {
 		powerups.multiball();
 		obj2.destroy();
@@ -257,12 +257,14 @@ function powerCollision(obj1, obj2) {
 		powerups.wall(obj1.lastHit);
 		obj2.destroy();
 	} else if (obj2.name == "scalePaddle") {
-		if(Math.random() > 0.50) {
+		if (Math.random() > 0.50) {
 			powerups.paddleGrow(obj1.lastHit);
-		}else {
+		} else {
 			powerups.paddleShrink(obj1.lastHit);
 		}
 		obj2.destroy();
+	}else{
+	obj2.destroy();
 	}
 
 }
@@ -277,11 +279,8 @@ function launch() {
 	}
 }
 
-
-
-
 function botAI() {
-	
+
 	closestBall = balls[0];
 
 	for (var i = 0; i < balls.length; i++) {
@@ -293,7 +292,7 @@ function botAI() {
 			}
 		}
 	}
-	
+
 	opponent.body.y -= Math.floor(Math.cos(Math.atan2(opponent.body.x - closestBall.ball.body.x, opponent.body.y + (opponent.height / 2) - closestBall.ball.body.y)) * 10);
-	
+
 }
