@@ -293,7 +293,9 @@ function launch() {
 			balls[i].autoLaunch(true);
 			alert("Start");
 		}
+		reset();
 		gameStarted = true;
+		
 	}
 }
 
