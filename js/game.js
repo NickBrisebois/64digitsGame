@@ -78,8 +78,7 @@ turn = true;
 		}
 balls = new Array();
 
-scoreLeft = 0;
-scoreRight = 0;
+
 balls.push(new ball(game.world.centerX, 300));
 for (var i = 0; i < 60; i++) {
 		for (var ii = 0; ii < 4; ii++) {
@@ -183,6 +182,7 @@ if(ballObj!=null){
 		alert("Right is WIN!\nSpace To Restart", true);
 		gameStarted=false;
 		}
+		console.log("test");
 	} else {
 		scoreLeft.text++;
 				if(scoreLeft.text >=10){
