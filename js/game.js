@@ -73,7 +73,11 @@ reset();
 function reset(){
 gameStarted = false;
 turn = true;
+		for (var i = 0; i < balls.length; i++) {
+			balls[i].ball.destroy();
+		}
 balls = new Array();
+
 scoreLeft = 0;
 scoreRight = 0;
 balls.push(new ball(game.world.centerX, 300));
@@ -201,6 +205,7 @@ function ball(x, y) {
 	this.ball.body.bounce.setTo(1, 1);
 
 	this.autoLaunch = function (side) {
+	
 		if (side) {
 			game.time.events.add(Phaser.Timer.SECOND * 2, function () {
 				this.ball.body.velocity.setTo(-500, game.rnd.integerInRange(-150, 150))
@@ -289,11 +294,12 @@ function powerCollision(obj1, obj2) {
 
 function launch() {
 	if (!gameStarted) {
+	reset();
 		for (var i = 0; i < balls.length; i++) {
 			balls[i].autoLaunch(true);
 			alert("Start");
 		}
-		reset();
+		
 		gameStarted = true;
 		
 	}
